@@ -1,6 +1,7 @@
 package com.mdd.ela.exception;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.ValidationException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,7 +1,6 @@
-package com.mdd.ela.dto;
+package com.mdd.ela.dto.simple;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 

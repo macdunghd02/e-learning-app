@@ -1,7 +1,7 @@
 package com.mdd.ela.util;
 
 
-import com.mdd.ela.dto.ListQueryDto;
+import com.mdd.ela.dto.simple.ListQueryDto;
 import com.mdd.ela.util.constants.Constants;
 
 public class PagingUtil {

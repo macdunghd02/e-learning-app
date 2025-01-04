@@ -1,8 +1,11 @@
 package com.mdd.ela.util;
 
-import com.mdd.ela.model.Account;
+import com.mdd.ela.dto.model.Account;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
 import java.util.Collections;
 
@@ -21,11 +24,19 @@ public class LoggedInUserUtil {
 
     public static long getIdOfLoggedInUser() {
         try {
-            var user = (Account) SecurityContextHolder.getContext().getAuthentication();
-            return user.getId();
+            // Lấy Authentication từ SecurityContext
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        } catch (ClassCastException | NumberFormatException ex) {
-            return 0L;
+            if (authentication instanceof JwtAuthenticationToken) {
+                JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) authentication;
+                Jwt jwt = (Jwt) jwtAuthenticationToken.getCredentials();
+
+                // Truy xuất thông tin id từ claims của JWT
+                return Long.parseLong(jwt.getClaimAsString("id"));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace(); // Log lỗi
         }
+        return 0L; // Trả về 0 nếu có lỗi
     }
-}
+    }

@@ -1,0 +1,72 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdd.ela.repository.AccountRepository">
+    <resultMap id="account" type="com.mdd.ela.dto.model.Account">
+        <result column="id" property="id"/>
+        <result column="email" property="email"/>
+        <result column="password" property="password"/>
+        <result column="first_name" property="firstName"/>
+        <result column="last_name" property="lastName"/>
+        <result column="dob" property="dob"/>
+        <result column="phone_num" property="phoneNum"/>
+        <result column="address" property="address"/>
+        <result column="description" property="description"/>
+        <result column="active" property="active"/>
+        <result column="delete_time" property="deleteTime"/>
+        <result column="avatar_image" property="avatarImage"/>
+        <result column="role" property="role"/>
+
+        <result column="create_time" property="createTime"/>
+        <result column="create_user_id" property="createUserId"/>
+        <result column="modify_time" property="modifyTime"/>
+        <result column="modify_user_id" property="modifyUserId"/>
+    </resultMap>
+
+    <insert id="signUp">
+        insert into account(
+          email
+        , password
+        , role
+        , create_time)
+        values (
+        #{email},
+        #{password},
+        #{role},
+        now())
+    </insert>
+
+    <update id="update" >
+        update account
+        set
+        first_name = #{firstName}
+        ,   last_name = #{lastName}
+        ,   dob = #{dob}
+        ,   phone_num = #{phoneNum}
+        ,   address = #{address}
+        ,   description = #{description}
+        ,   avatar_image = #{avatarImage}
+        ,   modify_time = now()
+        ,   modify_user_id = #{modifyUserId}
+        where id = #{modifyUserId}
+    </update>
+
+
+    <select id="findByEmailAndRole" resultMap = "account">
+        select * from account
+        where email = #{email}
+        and role = #{role}
+    </select>
+
+
+    <select id = "existsByEmail" resultType="int">
+        select count(email) from account
+        where email = #{email}
+    </select>
+
+
+    <update id="changePassword">
+        update account
+        set password = #{form.password},
+            modify_user_id = #{modifyUserId}
+        where email = #{form.email}
+    </update>
+</mapper>

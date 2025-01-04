@@ -1,4 +1,4 @@
-package com.mdd.ela.dto;
+package com.mdd.ela.dto.simple;
 
 import lombok.Getter;
 import lombok.Setter;

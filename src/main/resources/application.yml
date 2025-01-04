@@ -14,3 +14,12 @@ spring:
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+mybatis:
+  mapper-locations: classpath:repository/*.xml
+  type-aliases-package: com.mdd.ela.dto
+
+api:
+  prefix: /ela/v1
+
+jwt:
+  signerKey: "hRvc9cgVqAb6QgI7lLllt+PoEQ2U9AwlUXvCqB7rBvUsRLpmzdE+/WdbvqfwlJWO"

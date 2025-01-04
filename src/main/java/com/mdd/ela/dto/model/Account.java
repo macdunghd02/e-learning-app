@@ -1,12 +1,9 @@
-package com.mdd.ela.model;
+package com.mdd.ela.dto.model;
 
-import com.mdd.ela.dto.BaseDto;
+import com.mdd.ela.dto.simple.BaseDto;
 import com.mdd.ela.util.validation.EmailPattern;
 import com.mdd.ela.util.validation.PhoneNumberPattern;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
@@ -20,6 +17,8 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Account extends BaseDto {
     long id;
@@ -35,4 +34,6 @@ public class Account extends BaseDto {
     String description;
     Boolean active;
     LocalDateTime deleteTime;
+    String avatarImage;
+    String role;
 }
