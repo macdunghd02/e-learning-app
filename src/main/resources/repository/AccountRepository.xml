@@ -65,8 +65,8 @@
 
     <update id="changePassword">
         update account
-        set password = #{form.password},
+        set password = #{form.newPassword},
             modify_user_id = #{modifyUserId}
-        where email = #{form.email}
+        where id = #{modifyUserId}
     </update>
 </mapper>

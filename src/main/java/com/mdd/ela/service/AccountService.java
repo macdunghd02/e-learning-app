@@ -1,7 +1,7 @@
 package com.mdd.ela.service;
 
 import com.mdd.ela.dto.request.account.ChangePasswordForm;
-import com.mdd.ela.dto.request.account.UpdateAccountForm;
+import com.mdd.ela.dto.request.account.AccountUpdateForm;
 import com.mdd.ela.dto.request.account.SignUpForm;
 import com.mdd.ela.dto.response.BaseResponse;
 
@@ -14,6 +14,6 @@ import com.mdd.ela.dto.response.BaseResponse;
 public interface AccountService {
     BaseResponse signUp(SignUpForm form);
     BaseResponse changePassword(ChangePasswordForm form);
-    BaseResponse update(UpdateAccountForm form);
+    BaseResponse update(AccountUpdateForm form);
 
 }

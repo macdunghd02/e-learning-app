@@ -1,7 +1,7 @@
-package com.mdd.ela.controller.learner;
+package com.mdd.ela.controller;
 
 import com.mdd.ela.dto.request.account.ChangePasswordForm;
-import com.mdd.ela.dto.request.account.UpdateAccountForm;
+import com.mdd.ela.dto.request.account.AccountUpdateForm;
 import com.mdd.ela.dto.request.account.SignUpForm;
 import com.mdd.ela.dto.response.BaseResponse;
 import com.mdd.ela.service.AccountService;
@@ -35,7 +35,7 @@ public class LAccountController {
     }
 
     @PutMapping(value = "/update")
-    public ResponseEntity<Object> update(@RequestBody @Valid UpdateAccountForm form){
+    public ResponseEntity<Object> update(@RequestBody @Valid AccountUpdateForm form){
         BaseResponse baseResponse = service.update(form);
         return new ResponseEntity<>(baseResponse, HttpStatus.OK);
     }

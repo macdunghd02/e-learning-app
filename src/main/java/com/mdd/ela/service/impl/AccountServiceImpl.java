@@ -1,7 +1,7 @@
 package com.mdd.ela.service.impl;
 
 import com.mdd.ela.dto.request.account.ChangePasswordForm;
-import com.mdd.ela.dto.request.account.UpdateAccountForm;
+import com.mdd.ela.dto.request.account.AccountUpdateForm;
 import com.mdd.ela.dto.request.account.SignUpForm;
 import com.mdd.ela.dto.response.BaseResponse;
 import com.mdd.ela.exception.ElaRuntimeException;
@@ -49,7 +49,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public BaseResponse changePassword(ChangePasswordForm form) {
         long modifyUserId = LoggedInUserUtil.getIdOfLoggedInUser();
-        form.setPassword(encoder.encode(form.getPassword()));
+        form.setNewPassword(encoder.encode(form.getNewPassword()));
         int result = repository.changePassword(form,modifyUserId);
         if (result != 1)
             throw new ElaRuntimeException("fail");
@@ -57,7 +57,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public BaseResponse update(UpdateAccountForm form) {
+    public BaseResponse update(AccountUpdateForm form) {
         try {
             long modifyUserId = LoggedInUserUtil.getIdOfLoggedInUser();
             form.setModifyUserId(modifyUserId);

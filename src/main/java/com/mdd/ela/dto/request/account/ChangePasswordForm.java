@@ -14,6 +14,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ChangePasswordForm {
-    String password;
-    String email;
+    String oldPassword;
+    String newPassword;
+    String confirmNewPassword;
 }

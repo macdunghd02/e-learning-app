@@ -18,5 +18,4 @@ public interface AuthenticateService {
     DataResponse authenticate(AuthenticationReq req) throws JOSEException;
     DataResponse authenticate(IntrospectReq req) throws JOSEException, ParseException;
     String generateToken(Account account) throws JOSEException;
-    String buildScope(Account account);
 }

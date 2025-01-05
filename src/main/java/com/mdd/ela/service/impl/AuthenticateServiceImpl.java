@@ -83,11 +83,10 @@ public class AuthenticateServiceImpl implements AuthenticateService {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(account.getEmail())
-                .issuer("dmd")
+                .issuer("mdd")
                 .issueTime(new Date())
                 .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
-
-                .claim("scope", buildScope(account))
+                .claim("id",account.getId())
                 .build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
         JWSObject jwsObject = new JWSObject(header, payload);
@@ -96,8 +95,5 @@ public class AuthenticateServiceImpl implements AuthenticateService {
         return jwsObject.serialize();
     }
 
-    @Override
-    public String buildScope(Account account) {
-        return "SCOPE_" + account.getRole();
-    }
+
 }
