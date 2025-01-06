@@ -7,6 +7,10 @@ spring:
     name: e-learning-app
   profiles:
     active: dev
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
 
   datasource:
     url: jdbc:mysql://localhost/ela?currentSchema=public

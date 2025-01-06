@@ -3,12 +3,11 @@ package com.mdd.ela.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mdd.ela.dto.request.account.SignUpForm;
+import com.mdd.ela.dto.model.Video;
 import com.mdd.ela.dto.request.course.CourseInsertForm;
 import com.mdd.ela.dto.request.course.CourseUpdateForm;
 import com.mdd.ela.dto.response.BaseResponse;
-import com.mdd.ela.service.CourseService;
-import jakarta.validation.Valid;
+import com.mdd.ela.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,22 +16,20 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-
 /**
  * @author dungmd
- * @created 1/4/2025 9:51 下午
+ * @created 1/5/2025 4:41 下午
  * @project e-learning-app
  */
 @RestController
-@RequestMapping("${api.prefix}/course")
-public class CourseController {
+@RequestMapping("${api.prefix}/video")
+public class VideoController {
     @Autowired
-    CourseService service;
+    VideoService service;
 
     @GetMapping("/find-all")
-    public ResponseEntity<Object> findAll(){
-        var response = service.findAll();
+    public ResponseEntity<Object> findAll(@RequestParam long courseId){
+        var response = service.findAll(courseId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -43,13 +40,13 @@ public class CourseController {
     }
 
     @PostMapping(value = "/insert",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> insert(@RequestPart("courseInsertForm") String courseInsertForm,  @RequestParam(value = "image") MultipartFile image){
-        CourseInsertForm form = null;
+    public ResponseEntity<Object> insert(@RequestPart("videoForm") String videoForm,  @RequestParam(value = "file") MultipartFile file){
+        Video form = null;
         BaseResponse baseResponse;
         try {
             ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            form = objectMapper.readValue(courseInsertForm, CourseInsertForm.class);
-            baseResponse = service.insert(form, image);
+            form = objectMapper.readValue(videoForm, Video.class);
+            baseResponse = service.insert(form, file);
         } catch (JsonProcessingException ex) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
@@ -57,13 +54,13 @@ public class CourseController {
     }
 
     @PutMapping(value = "/update",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> update(@RequestPart("courseUpdateForm") String courseUpdateForm,  @RequestParam(value = "image") MultipartFile image){
-        CourseUpdateForm form = null;
+    public ResponseEntity<Object> update(@RequestPart("video") String videoForm,  @RequestParam(value = "file") MultipartFile file){
+        Video form = null;
         BaseResponse baseResponse;
         try {
             ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            form = objectMapper.readValue(courseUpdateForm, CourseUpdateForm.class);
-            baseResponse = service.update(form, image);
+            form = objectMapper.readValue(videoForm, Video.class);
+            baseResponse = service.update(form, file);
         } catch (JsonProcessingException ex) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
@@ -77,3 +74,4 @@ public class CourseController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
+

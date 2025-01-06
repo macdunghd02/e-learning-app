@@ -23,8 +23,8 @@ public class Video extends BaseDto {
     long chapterNum;
     String chapterTitle;
     long videoNum;
-    LocalDate videoTitle;
+    String videoTitle;
     String videoUrl;
-    String videoLength;
+    Double videoLength;
     int active;
 }

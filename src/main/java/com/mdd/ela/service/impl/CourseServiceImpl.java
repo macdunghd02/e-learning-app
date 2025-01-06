@@ -1,5 +1,7 @@
 package com.mdd.ela.service.impl;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.mdd.ela.dto.model.Course;
 import com.mdd.ela.dto.request.course.CourseInsertForm;
 import com.mdd.ela.dto.request.course.CourseResultForm;
@@ -16,8 +18,10 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author dungmd
@@ -31,8 +35,11 @@ public class CourseServiceImpl implements CourseService {
 
     CourseRepository repository;
 
-    public CourseServiceImpl(CourseRepository repository) {
+    Cloudinary cloudinary;
+
+    public CourseServiceImpl(CourseRepository repository, Cloudinary cloudinary) {
         this.repository = repository;
+        this.cloudinary = cloudinary;
     }
 
     @Override
@@ -56,10 +63,14 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public BaseResponse insert(CourseInsertForm form) {
+    public BaseResponse insert(CourseInsertForm form, MultipartFile image) {
         try {
             long userId = LoggedInUserUtil.getIdOfLoggedInUser();
             form.setAccountId(userId);
+            Map r = this.cloudinary.uploader().upload(image.getBytes(),
+                    ObjectUtils.asMap("resource_type", "auto"));
+            String fileLocation = (String) r.get("secure_url");
+            form.setProfileImage(fileLocation);
             int res = repository.insert(form);
             if(res != 1)
                 throw new ElaRuntimeException("fail");
@@ -70,10 +81,14 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public BaseResponse update(CourseUpdateForm form) {
+    public BaseResponse update(CourseUpdateForm form, MultipartFile image) {
         try {
             long userId = LoggedInUserUtil.getIdOfLoggedInUser();
             form.setModifyUserId(userId);
+            Map r = this.cloudinary.uploader().upload(image.getBytes(),
+                    ObjectUtils.asMap("resource_type", "auto"));
+            String fileLocation = (String) r.get("secure_url");
+            form.setProfileImage(fileLocation);
             int res = repository.update(form);
             if(res != 1)
                 throw new ElaRuntimeException("fail");
