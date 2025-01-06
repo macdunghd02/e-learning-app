@@ -1,0 +1,129 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdd.ela.repository.CourseRepository">
+    <resultMap id="course" type="com.mdd.ela.dto.model.Course">
+        <result column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="account_id" property="accountId"/>
+        <result column="description" property="description"/>
+        <result column="profile_image" property="profileImage"/>
+        <result column="root_price" property="rootPrice"/>
+        <result column="price" property="price"/>
+        <result column="active" property="active"/>
+        <result column="type" property="type"/>
+        <result column="category_id" property="categoryId"/>
+
+        <result column="create_time" property="createTime"/>
+        <result column="create_user_id" property="createUserId"/>
+        <result column="modify_time" property="modifyTime"/>
+        <result column="modify_user_id" property="modifyUserId"/>
+
+        <collection property="effects" ofType="java.lang.String">
+            <result column="effect"/>
+        </collection>
+
+    </resultMap>
+
+    <resultMap id="courseResultForm" type="com.mdd.ela.dto.request.course.CourseResultForm">
+        <result column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="account_id" property="accountId"/>
+        <result column="description" property="description"/>
+        <result column="profile_image" property="profileImage"/>
+        <result column="root_price" property="rootPrice"/>
+        <result column="price" property="price"/>
+        <result column="name" property="authorName"/>
+        <result column="num_of_video" property="numOfVideo"/>
+        <result column="active" property="active"/>
+        <result column="type" property="type"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="category_name" property="categoryName"/>
+
+
+        <result column="create_time" property="createTime"/>
+        <result column="create_user_id" property="createUserId"/>
+        <result column="modify_time" property="modifyTime"/>
+        <result column="modify_user_id" property="modifyUserId"/>
+
+
+        <collection property="effects" ofType="java.lang.String">
+            <result column="effect"/>
+        </collection>
+    </resultMap>
+
+    <sql id="categoryTable">
+        select c1.id, c1.code, c1.description from code c1 join code c2 on c1.p_id = c2.id where c2.code = 'CATEGORY'
+    </sql>
+
+    <select id="findAll" resultMap = "courseResultForm">
+        select c.*, ce.effect, concat(a.first_name,' ', a.last_name) as name, tmp.num_of_video as numOfVideo,
+        ct.description as category_name
+        from course c
+        left join course_effect ce on c.id = ce.course_id
+        left join account a on c.account_id = a.id
+        left join (select count(id) as num_of_video, course_id from video v group by course_id) tmp on c.id = tmp.course_id
+        left join   (<include refid="categoryTable"></include>) ct on c.category_id = ct.id
+
+    </select>
+
+    <select id="select" resultMap="courseResultForm">
+        select c.*, ce.effect, concat(a.first_name,' ', a.last_name) as name, tmp.num_of_video as numOfVideo,
+        ct.description as category_name
+        from course c
+        left join course_effect ce on c.id = ce.course_id
+        left join account a on c.account_id = a.id
+        left join (select count(id) as num_of_video, course_id from video v group by course_id) tmp on c.id = tmp.course_id
+        left join   (<include refid="categoryTable"></include>) ct on c.category_id = ct.id
+        where c.id = #{id}
+    </select>
+
+    <insert id="insert">
+        insert into course(
+        title
+        , account_id
+        , description
+        , profile_image
+        , root_price
+        , price
+        , active
+        , type
+        , category_id
+        , create_time
+        , create_user_id)
+        values (
+        #{title},
+        #{accountId},
+        #{description},
+        #{profileImage},
+        #{rootPrice},
+        #{price},
+        #{active},
+        #{type},
+        #{categoryId},
+        now(),
+        #{accountId})
+    </insert>
+
+
+    <update id="update">
+        update course
+        set
+        title = #{title}
+        ,   description = #{description}
+        ,   profile_image = #{profileImage}
+        ,   root_price = #{rootPrice}
+        ,   price = #{price}
+        ,   active = #{active}
+        ,   type = #{type}
+        ,   category_id = #{categoryId}
+        ,   modify_time = now()
+        ,   modify_user_id = #{modifyUserId}
+        where id = #{id}
+    </update>
+
+
+    <delete id="delete">
+        delete from course
+        where id = #{id}
+    </delete>
+
+</mapper>

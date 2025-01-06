@@ -1,1 +1,29 @@
-spring.application.name=e-learning-app
+server:
+  port: 8080
+  servlet:
+    context-path: /
+spring:
+  application:
+    name: e-learning-app
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
+
+  datasource:
+    url: jdbc:mysql://localhost/ela?currentSchema=public
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis:
+  mapper-locations: classpath:repository/*.xml
+  type-aliases-package: com.mdd.ela.dto
+
+api:
+  prefix: /ela/v1
+
+jwt:
+  signerKey: "hRvc9cgVqAb6QgI7lLllt+PoEQ2U9AwlUXvCqB7rBvUsRLpmzdE+/WdbvqfwlJWO"
