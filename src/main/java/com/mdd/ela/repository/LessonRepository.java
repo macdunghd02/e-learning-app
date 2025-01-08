@@ -1,6 +1,6 @@
 package com.mdd.ela.repository;
 
-import com.mdd.ela.dto.model.Video;
+import com.mdd.ela.dto.model.Lesson;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -11,10 +11,10 @@ import java.util.List;
  * @project e-learning-app
  */
 @Mapper
-public interface VideoRepository {
-    List<Video> findAll(long courseId);
-    Video select(long id);
-    int insert(Video form);
-    int update(Video form);
+public interface LessonRepository {
+    List<Lesson> findAll(long courseId);
+    Lesson select(long id);
+    int insert(Lesson form);
+    int update(Lesson form);
     int delete(long id);
 }

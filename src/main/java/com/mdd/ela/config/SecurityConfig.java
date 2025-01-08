@@ -27,23 +27,30 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-    private final String[] WHITE_LIST = {"ela/v1/learner/account/sign-up",
-                                            "ela/v1/auth/**"};
+    private final String[] WHITE_LIST = {
+            "ela/v1/account/sign-up",
+            "ela/v1/auth/**",
+            "/ela/swagger-ui.html",
+            "/ela/swagger-ui/**",
+            "/ela/v1/api-docs/**",
+            "/ela/swagger-resources/**",
+            "/ela/webjars/**"
+    };
 
-    @Value("${jwt.signerKey}")
+    @Value("${jwt.signer-key}")
     private String signerKey;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .csrf(AbstractHttpConfigurer::disable) // Tắt CSRF nếu không dùng
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request ->
                         request
-                                .requestMatchers(WHITE_LIST).permitAll() // Cho phép truy cập không cần xác thực với white list
-                                .anyRequest().authenticated()           // Yêu cầu xác thực với tất cả các yêu cầu còn lại
+                                .requestMatchers(WHITE_LIST).permitAll()
+                                .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt ->
-                        jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))); // Xác thực bằng JWT
+                        jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
 
         return httpSecurity.build();
     }
@@ -51,8 +58,8 @@ public class SecurityConfig {
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        grantedAuthoritiesConverter.setAuthorityPrefix("ROLE_"); // Thêm tiền tố ROLE_
-        grantedAuthoritiesConverter.setAuthoritiesClaimName("roles"); // Claim chứa danh sách roles
+        grantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
+        grantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
 
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);

@@ -7,14 +7,13 @@ import lombok.experimental.FieldDefaults;
 
 /**
  * @author dungmd
- * @created 12/24/2024 3:18 PM
+ * @created 12/24/2024 3:15 PM
  * @project e-learning-app
  */
 @Data
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ChangePasswordForm {
-    String oldPassword;
-    String newPassword;
-    String confirmNewPassword;
+public class SignUpRequest {
+    String password;
+    String email;
 }

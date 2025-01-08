@@ -12,7 +12,7 @@
         <result column="description" property="description"/>
         <result column="active" property="active"/>
         <result column="delete_time" property="deleteTime"/>
-        <result column="avatar_image" property="avatarImage"/>
+        <result column="avatarUrl" property="avatarUrl"/>
         <result column="role" property="role"/>
 
         <result column="create_time" property="createTime"/>
@@ -20,6 +20,35 @@
         <result column="modify_time" property="modifyTime"/>
         <result column="modify_user_id" property="modifyUserId"/>
     </resultMap>
+
+    <resultMap id="accountResponse" type="com.mdd.ela.dto.request.account.AccountResponse">
+        <result column="id" property="id"/>
+        <result column="email" property="email"/>
+        <result column="password" property="password"/>
+        <result column="first_name" property="firstName"/>
+        <result column="last_name" property="lastName"/>
+        <result column="dob" property="dob"/>
+        <result column="phone_num" property="phoneNum"/>
+        <result column="address" property="address"/>
+        <result column="description" property="description"/>
+        <result column="active" property="active"/>
+        <result column="delete_time" property="deleteTime"/>
+        <result column="avatarUrl" property="avatarUrl"/>
+        <result column="role" property="role"/>
+
+        <result column="create_time" property="createTime"/>
+        <result column="create_user_id" property="createUserId"/>
+        <result column="modify_time" property="modifyTime"/>
+        <result column="modify_user_id" property="modifyUserId"/>
+    </resultMap>
+
+
+
+
+    <select id = "getDetail" resultMap="accountResponse">
+        select * from account
+        where id = #{id}
+    </select>
 
     <insert id="signUp">
         insert into account(
@@ -30,7 +59,7 @@
         values (
         #{email},
         #{password},
-        #{role},
+        'LEARNER',
         now())
     </insert>
 
@@ -43,7 +72,7 @@
         ,   phone_num = #{phoneNum}
         ,   address = #{address}
         ,   description = #{description}
-        ,   avatar_image = #{avatarImage}
+        ,   avatar_url = #{avatarUrl}
         ,   modify_time = now()
         ,   modify_user_id = #{modifyUserId}
         where id = #{modifyUserId}
@@ -65,7 +94,7 @@
 
     <update id="changePassword">
         update account
-        set password = #{form.newPassword},
+        set password = #{request.newPassword},
             modify_user_id = #{modifyUserId}
         where id = #{modifyUserId}
     </update>

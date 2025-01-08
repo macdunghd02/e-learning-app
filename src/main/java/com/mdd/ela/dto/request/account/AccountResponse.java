@@ -5,11 +5,9 @@ import com.mdd.ela.dto.model.Account;
 
 /**
  * @author dungmd
- * @created 1/4/2025 10:36 上午
+ * @created 1/7/2025 6:27 下午
  * @project e-learning-app
  */
-
-
-@JsonIgnoreProperties({"id","createUserId", "createTime", "modifyUserId", "modifyTime", "email", "password"})
-public class AccountUpdateForm extends Account {
+@JsonIgnoreProperties("password")
+public class AccountResponse extends Account {
 }

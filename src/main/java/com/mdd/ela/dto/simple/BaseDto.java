@@ -1,5 +1,6 @@
 package com.mdd.ela.dto.simple;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -14,8 +15,10 @@ import java.time.LocalDateTime;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BaseDto {
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime createTime;
     Long createUserId;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime modifyTime;
     Long modifyUserId;
 }

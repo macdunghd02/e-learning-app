@@ -24,7 +24,7 @@ public class Constants {
     public static final String PAYLOAD_TOKEN_USERNAME = "username";
     public static final String PAYLOAD_TOKEN_PHONE_NUMBER = "phone_number";
     public static final String PAYLOAD_TOKEN_ID = "token_id";
-    public static final String KEY_ENCRYPT = "emNvYSBzZXJ2aWNlc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS";
+    public static final String KEY_ENCRYPT = "asdf";
 
 
 

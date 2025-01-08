@@ -2,8 +2,11 @@ package com.mdd.ela.dto.request.course;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mdd.ela.dto.model.Course;
+import com.mdd.ela.dto.request.rating.RatingResultForm;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.List;
 
 /**
  * @author dungmd
@@ -14,8 +17,10 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CourseResultForm extends Course {
+public class CourseResponse extends Course {
     String authorName;
-    long numOfVideo;
+    long numOfLesson;
+    String totalTime;
+    List<RatingResultForm> ratingResultFormList;
     String categoryName;
 }

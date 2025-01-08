@@ -1,5 +1,8 @@
 package com.mdd.ela.dto.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.mdd.ela.dto.simple.BaseDto;
 import com.mdd.ela.util.validation.EmailPattern;
 import com.mdd.ela.util.validation.PhoneNumberPattern;
@@ -27,6 +30,7 @@ public class Account extends BaseDto {
     String password;
     String firstName;
     String lastName;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate dob;
     @PhoneNumberPattern
     String phoneNum;
@@ -34,6 +38,6 @@ public class Account extends BaseDto {
     String description;
     Boolean active;
     LocalDateTime deleteTime;
-    String avatarImage;
+    String avatarUrl;
     String role;
 }

@@ -1,14 +1,8 @@
 package com.mdd.ela.service;
 
-import com.mdd.ela.dto.model.Course;
-import com.mdd.ela.dto.request.AuthenticationReq;
-import com.mdd.ela.dto.request.course.CourseInsertForm;
-import com.mdd.ela.dto.request.course.CourseUpdateForm;
+import com.mdd.ela.dto.request.course.CourseRequest;
 import com.mdd.ela.dto.response.BaseResponse;
 import com.mdd.ela.dto.response.DataResponse;
-import com.nimbusds.jose.JOSEException;
-import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author dungmd
@@ -17,9 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
  */
 
 public interface CourseService {
-    DataResponse findAll();
-    DataResponse select(long id);
-    BaseResponse insert(CourseInsertForm form, MultipartFile image);
-    BaseResponse update(CourseUpdateForm form, MultipartFile image);
+    DataResponse getAll();
+    DataResponse getDetail(long id);
+    BaseResponse create(CourseRequest request);
+    BaseResponse update(long id,CourseRequest request);
     BaseResponse delete(long id);
 }

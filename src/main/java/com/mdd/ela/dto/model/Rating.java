@@ -4,12 +4,9 @@ import com.mdd.ela.dto.simple.BaseDto;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDate;
-import java.util.List;
-
 /**
  * @author dungmd
- * @created 1/4/2025 5:46 下午
+ * @created 1/7/2025 11:27 上午
  * @project e-learning-app
  */
 @Data
@@ -17,14 +14,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Video extends BaseDto {
+public class Rating extends BaseDto {
     long id;
-    long courseId;
-    long chapterNum;
-    String chapterTitle;
-    long videoNum;
-    String videoTitle;
-    String videoUrl;
-    Double videoLength;
-    int active;
+    long account_id;
+    long course_id;
+    int rating;
+    String comment;
 }
