@@ -1,15 +1,15 @@
 package com.mdd.ela.dto.model;
 
 import com.mdd.ela.dto.simple.BaseDto;
-import com.mdd.ela.util.validation.EmailPattern;
-import com.mdd.ela.util.validation.PhoneNumberPattern;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.time.LocalDate;
 import java.util.List;
 
 /**
  * @author dungmd
- * @created 1/4/2025 5:44 下午
+ * @created 1/4/2025 5:46 下午
  * @project e-learning-app
  */
 @Data
@@ -17,15 +17,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Course extends BaseDto {
+public class Lesson extends BaseDto {
     long id;
+    long chapterId;
     String title;
-    long authorAccountId;
     String description;
-    List<String> effect;
-    String avatarUrl;
-    int rootPrice;
+    String orderNum;
     int active;
-    int type;
-    long categoryId;
 }

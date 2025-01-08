@@ -1,9 +1,11 @@
 package com.mdd.ela.service.impl;
 
-import com.mdd.ela.dto.request.account.ChangePasswordForm;
-import com.mdd.ela.dto.request.account.AccountUpdateForm;
-import com.mdd.ela.dto.request.account.SignUpForm;
+import com.mdd.ela.dto.request.account.AccountResponse;
+import com.mdd.ela.dto.request.account.ChangePasswordRequest;
+import com.mdd.ela.dto.request.account.AccountRequest;
+import com.mdd.ela.dto.request.account.SignUpRequest;
 import com.mdd.ela.dto.response.BaseResponse;
+import com.mdd.ela.dto.response.DataResponse;
 import com.mdd.ela.exception.ElaRuntimeException;
 import com.mdd.ela.exception.ElaValidateException;
 import com.mdd.ela.repository.AccountRepository;
@@ -14,6 +16,8 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 /**
  * @author dungmd
@@ -34,12 +38,38 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public BaseResponse signUp(SignUpForm form) {
+    public BaseResponse signUp(SignUpRequest request) {
         try {
-            if (repository.existsByEmail(form.getEmail()) != 0)
+            if (repository.existsByEmail(request.getEmail()) != 0)
                 throw new ElaValidateException("emailExisted");
-            form.setPassword(encoder.encode(form.getPassword()));
-            repository.signUp(form);
+            request.setPassword(encoder.encode(request.getPassword()));
+            repository.signUp(request);
+            return BaseResponse.simpleSuccess("success");
+        } catch (Exception e) {
+            throw new ElaRuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public DataResponse getDetail(long id) {
+        try {
+            AccountResponse response = repository.getDetail(id);
+            return DataResponse.builder().data(response).build();
+        } catch (Exception e) {
+            throw new ElaRuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public BaseResponse changePassword(ChangePasswordRequest request, long id) {
+        try {
+            AccountResponse currentAcc = repository.getDetail(id);
+            if(!Objects.equals(encoder.encode(request.getOldPassword()), currentAcc.getPassword()))
+                throw new ElaRuntimeException("wrongPassword");
+            request.setNewPassword(encoder.encode(request.getNewPassword()));
+            int result = repository.changePassword(request, id);
+            if (result != 1)
+                throw new ElaRuntimeException("fail");
             return BaseResponse.simpleSuccess("success");
         }catch (Exception e) {
             throw new ElaRuntimeException(e.getMessage());
@@ -47,25 +77,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public BaseResponse changePassword(ChangePasswordForm form) {
-        long modifyUserId = LoggedInUserUtil.getIdOfLoggedInUser();
-        form.setNewPassword(encoder.encode(form.getNewPassword()));
-        int result = repository.changePassword(form,modifyUserId);
-        if (result != 1)
-            throw new ElaRuntimeException("fail");
-        return BaseResponse.simpleSuccess("success");
-    }
-
-    @Override
-    public BaseResponse update(AccountUpdateForm form) {
+    public BaseResponse update(AccountRequest request, long id) {
         try {
-            long modifyUserId = LoggedInUserUtil.getIdOfLoggedInUser();
-            form.setModifyUserId(modifyUserId);
-            int result = repository.update(form);
+            request.setModifyUserId(id);
+            int result = repository.update(request);
             if (result != 1)
                 throw new ElaRuntimeException("fail");
             return BaseResponse.simpleSuccess("success");
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new ElaRuntimeException(e.getMessage());
         }
     }

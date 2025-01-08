@@ -2,23 +2,18 @@ package com.mdd.ela.service.impl;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.mdd.ela.dto.model.Course;
-import com.mdd.ela.dto.request.course.CourseInsertForm;
-import com.mdd.ela.dto.request.course.CourseResultForm;
-import com.mdd.ela.dto.request.course.CourseUpdateForm;
+import com.mdd.ela.dto.request.course.CourseRequest;
+import com.mdd.ela.dto.request.course.CourseResponse;
 import com.mdd.ela.dto.response.BaseResponse;
 import com.mdd.ela.dto.response.DataResponse;
 import com.mdd.ela.exception.ElaRuntimeException;
 import com.mdd.ela.repository.CourseRepository;
 import com.mdd.ela.service.CourseService;
 import com.mdd.ela.util.LoggedInUserUtil;
-import com.nimbusds.jose.JOSEException;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -43,9 +38,9 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public DataResponse findAll() {
+    public DataResponse getAll() {
         try {
-            List<CourseResultForm> courseList = repository.findAll();
+            List<CourseResponse> courseList = repository.getAll();
             return DataResponse.builder().data(courseList).build();
         } catch (Exception e) {
             throw new ElaRuntimeException(e.getMessage());
@@ -53,9 +48,9 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public DataResponse select(long id) {
+    public DataResponse getDetail(long id) {
         try {
-            CourseResultForm course = repository.select(id);
+            CourseResponse course = repository.getDetail(id);
             return DataResponse.builder().data(course).build();
         } catch (Exception e) {
             throw new ElaRuntimeException(e.getMessage());
@@ -63,15 +58,11 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public BaseResponse insert(CourseInsertForm form, MultipartFile image) {
+    public BaseResponse create(CourseRequest request) {
         try {
             long userId = LoggedInUserUtil.getIdOfLoggedInUser();
-            form.setAccountId(userId);
-            Map r = this.cloudinary.uploader().upload(image.getBytes(),
-                    ObjectUtils.asMap("resource_type", "auto"));
-            String fileLocation = (String) r.get("secure_url");
-            form.setProfileImage(fileLocation);
-            int res = repository.insert(form);
+            request.setAuthorAccountId(userId);
+            int res = repository.create(request);
             if(res != 1)
                 throw new ElaRuntimeException("fail");
             return BaseResponse.simpleSuccess("success");
@@ -81,15 +72,12 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public BaseResponse update(CourseUpdateForm form, MultipartFile image) {
+    public BaseResponse update(long id, CourseRequest request) {
         try {
             long userId = LoggedInUserUtil.getIdOfLoggedInUser();
-            form.setModifyUserId(userId);
-            Map r = this.cloudinary.uploader().upload(image.getBytes(),
-                    ObjectUtils.asMap("resource_type", "auto"));
-            String fileLocation = (String) r.get("secure_url");
-            form.setProfileImage(fileLocation);
-            int res = repository.update(form);
+            request.setModifyUserId(userId);
+            request.setId(id);
+            int res = repository.update(request);
             if(res != 1)
                 throw new ElaRuntimeException("fail");
             return BaseResponse.simpleSuccess("success");

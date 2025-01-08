@@ -1,9 +1,10 @@
 package com.mdd.ela.repository;
 
 import com.mdd.ela.dto.model.Account;
-import com.mdd.ela.dto.request.account.ChangePasswordForm;
-import com.mdd.ela.dto.request.account.SignUpForm;
-import com.mdd.ela.dto.request.account.AccountUpdateForm;
+import com.mdd.ela.dto.request.account.AccountResponse;
+import com.mdd.ela.dto.request.account.ChangePasswordRequest;
+import com.mdd.ela.dto.request.account.SignUpRequest;
+import com.mdd.ela.dto.request.account.AccountRequest;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -13,9 +14,10 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface AccountRepository{
-    int signUp(SignUpForm form);
-    int changePassword(ChangePasswordForm form, long modifyUserId);
+    int signUp(SignUpRequest request);
+    int changePassword(ChangePasswordRequest request, long modifyUserId);
+    AccountResponse getDetail(long id);
     int existsByEmail(String email);
     Account findByEmailAndRole(String email, String role);
-    int update(AccountUpdateForm form);
+    int update(AccountRequest request);
 }

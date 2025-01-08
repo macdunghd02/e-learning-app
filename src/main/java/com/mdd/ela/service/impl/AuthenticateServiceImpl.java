@@ -41,7 +41,7 @@ public class AuthenticateServiceImpl implements AuthenticateService {
     AccountRepository repository;
 
     @NonFinal
-    @Value("${jwt.signerKey}")
+    @Value("${jwt.signer-key}")
     protected String SIGNER_KEY;
 
     @Override

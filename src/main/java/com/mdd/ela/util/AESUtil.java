@@ -27,7 +27,7 @@ public class AESUtil {
             byte[] salt = new byte[]{0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09};
             int iterations = 10000;
             int keyLength = 128;
-            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("asdf");
             KeySpec spec = new PBEKeySpec(myKey.toCharArray(), salt, iterations, keyLength);
             SecretKey tmp = factory.generateSecret(spec);
             secretKey = new SecretKeySpec(tmp.getEncoded(), "AES");

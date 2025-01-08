@@ -2,13 +2,13 @@ package com.mdd.ela.service.impl;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.mdd.ela.dto.model.Video;
-import com.mdd.ela.dto.request.course.CourseResultForm;
+import com.mdd.ela.dto.model.Lesson;
+import com.mdd.ela.dto.request.lesson.LessonRequest;
 import com.mdd.ela.dto.response.BaseResponse;
 import com.mdd.ela.dto.response.DataResponse;
 import com.mdd.ela.exception.ElaRuntimeException;
-import com.mdd.ela.repository.VideoRepository;
-import com.mdd.ela.service.VideoService;
+import com.mdd.ela.repository.LessonRepository;
+import com.mdd.ela.service.LessonService;
 import com.mdd.ela.util.LoggedInUserUtil;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -28,47 +28,41 @@ import java.util.Map;
 @Service
 @Transactional(rollbackFor = ElaRuntimeException.class)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class VideoServiceImpl implements VideoService {
-    VideoRepository repository;
+public class LessonServiceImpl implements LessonService {
+    LessonRepository repository;
     Cloudinary cloudinary;
 
-    public VideoServiceImpl(VideoRepository repository, Cloudinary cloudinary) {
+    public LessonServiceImpl(LessonRepository repository, Cloudinary cloudinary) {
         this.repository = repository;
         this.cloudinary = cloudinary;
     }
 
     @Override
-    public DataResponse findAll(long courseId) {
+    public DataResponse getAll(long courseId) {
         try {
-            List<Video> videoList = repository.findAll(courseId);
-            return DataResponse.builder().data(videoList).build();
+            List<Lesson> lessonList = repository.findAll(courseId);
+            return DataResponse.builder().data(lessonList).build();
         } catch (Exception e) {
             throw new ElaRuntimeException(e.getMessage());
         }
     }
 
     @Override
-    public DataResponse select(long id) {
+    public DataResponse getDetail(long id) {
         try {
-            Video video = repository.select(id);
-            return DataResponse.builder().data(video).build();
+            Lesson lesson = repository.select(id);
+            return DataResponse.builder().data(lesson).build();
         } catch (Exception e) {
             throw new ElaRuntimeException(e.getMessage());
         }
     }
 
     @Override
-    public BaseResponse insert(Video form, MultipartFile file) {
+    public BaseResponse create(LessonRequest request) {
         try {
             long userId = LoggedInUserUtil.getIdOfLoggedInUser();
-            form.setCreateUserId(userId);
-            Map r = this.cloudinary.uploader().upload(file.getBytes(),
-                    ObjectUtils.asMap("resource_type", "auto"));
-            String fileLocation = (String) r.get("secure_url");
-            Double videoLength = (Double) r.get("duration");
-            form.setVideoUrl(fileLocation);
-            form.setVideoLength(videoLength);
-            int res = repository.insert(form);
+            request.setCreateUserId(userId);
+            int res = repository.insert(request);
             if(res != 1)
                 throw new ElaRuntimeException("fail");
             return BaseResponse.simpleSuccess("success");
@@ -78,7 +72,7 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public BaseResponse update(Video form, MultipartFile file) {
+    public BaseResponse update(long id,LessonRequest request) {
         return null;
     }
 
