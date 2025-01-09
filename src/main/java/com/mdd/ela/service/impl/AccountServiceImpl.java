@@ -4,15 +4,18 @@ import com.mdd.ela.dto.request.account.AccountResponse;
 import com.mdd.ela.dto.request.account.ChangePasswordRequest;
 import com.mdd.ela.dto.request.account.AccountRequest;
 import com.mdd.ela.dto.request.account.SignUpRequest;
+import com.mdd.ela.dto.response.APIResponse;
 import com.mdd.ela.dto.response.BaseResponse;
 import com.mdd.ela.dto.response.DataResponse;
 import com.mdd.ela.exception.ElaRuntimeException;
 import com.mdd.ela.exception.ElaValidateException;
 import com.mdd.ela.repository.AccountRepository;
 import com.mdd.ela.service.AccountService;
+import com.mdd.ela.util.ErrorCode;
 import com.mdd.ela.util.LoggedInUserUtil;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,56 +41,64 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public BaseResponse signUp(SignUpRequest request) {
+    public APIResponse signUp(SignUpRequest request) {
         try {
             if (repository.existsByEmail(request.getEmail()) != 0)
-                throw new ElaValidateException("emailExisted");
+                throw new ElaRuntimeException(ErrorCode.EMAIL_EXISTED);
             request.setPassword(encoder.encode(request.getPassword()));
             repository.signUp(request);
-            return BaseResponse.simpleSuccess("success");
-        } catch (Exception e) {
+            AccountResponse accountResponse = repository.getDetail(request.getId());
+            return APIResponse.success(accountResponse);
+        } catch (ElaRuntimeException e) {
+            throw e;
+        } catch (Exception e){
             throw new ElaRuntimeException(e.getMessage());
         }
     }
 
     @Override
-    public DataResponse getDetail(long id) {
+    public APIResponse getDetail(long id) {
         try {
             AccountResponse response = repository.getDetail(id);
-            return DataResponse.builder().data(response).build();
-        } catch (Exception e) {
+            return APIResponse.success(response);
+        } catch (ElaRuntimeException e) {
+            throw e;
+        } catch (Exception e){
             throw new ElaRuntimeException(e.getMessage());
         }
     }
 
     @Override
-    public BaseResponse changePassword(ChangePasswordRequest request, long id) {
+    public APIResponse changePassword(ChangePasswordRequest request) {
         try {
-            AccountResponse currentAcc = repository.getDetail(id);
-            if(!Objects.equals(encoder.encode(request.getOldPassword()), currentAcc.getPassword()))
-                throw new ElaRuntimeException("wrongPassword");
+            AccountResponse currentAcc = repository.getDetail(request.getId());
+            String en = encoder.encode(request.getOldPassword());
+            if(!encoder.matches(request.getOldPassword(), currentAcc.getPassword()))
+                throw new ElaRuntimeException(ErrorCode.WRONG_PASSWORD);
             request.setNewPassword(encoder.encode(request.getNewPassword()));
-            int result = repository.changePassword(request, id);
+            int result = repository.changePassword(request);
             if (result != 1)
-                throw new ElaRuntimeException("fail");
-            return BaseResponse.simpleSuccess("success");
-        }catch (Exception e) {
+                throw new ElaRuntimeException("Request fail");
+            return APIResponse.success(null);
+        } catch (ElaRuntimeException e) {
+            throw e;
+        } catch (Exception e){
             throw new ElaRuntimeException(e.getMessage());
         }
     }
 
     @Override
-    public BaseResponse update(AccountRequest request, long id) {
+    public APIResponse update(AccountRequest request) {
         try {
-            request.setModifyUserId(id);
             int result = repository.update(request);
+            AccountResponse accountResponse = repository.getDetail(request.getId());
             if (result != 1)
-                throw new ElaRuntimeException("fail");
-            return BaseResponse.simpleSuccess("success");
-        } catch (Exception e) {
+                throw new ElaRuntimeException("Request fail");
+            return APIResponse.success(accountResponse);
+        } catch (ElaRuntimeException e) {
+            throw e;
+        } catch (Exception e){
             throw new ElaRuntimeException(e.getMessage());
         }
     }
-
-
 }

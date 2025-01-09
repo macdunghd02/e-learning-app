@@ -1,6 +1,7 @@
 package com.mdd.ela.exception;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mdd.ela.util.ErrorCode;
 import jakarta.validation.ValidationException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,25 +18,14 @@ import java.util.Map;
 @Setter
 @AllArgsConstructor
 public class ElaRuntimeException extends RuntimeException {
-    @JsonProperty("error_list")
-    private List errorList;
-
-    @JsonProperty("error_map")
-    private Map<String, Object> errMap;
-    public ElaRuntimeException(Throwable e) {
-        super(e);
-    }
+    private final Integer statusCode;
 
     public ElaRuntimeException(String message) {
         super(message);
+        this.statusCode = 500;
     }
-
-    public ElaRuntimeException(String message, Map<String, Object> errMap) {
-        super(message);
-        this.errMap = Map.copyOf(errMap);
-    }
-    public ElaRuntimeException(String message, List<?> errorList) {
-        super(message);
-        this.errorList = List.copyOf(errorList);
+    public ElaRuntimeException(ErrorCode errorCode) {
+        super(errorCode.getErrorMessage());
+        this.statusCode = errorCode.getHttpStatus().value();
     }
 }

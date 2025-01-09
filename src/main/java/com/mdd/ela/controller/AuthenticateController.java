@@ -1,10 +1,12 @@
 package com.mdd.ela.controller;
 
-import com.mdd.ela.dto.request.AuthenticationReq;
-import com.mdd.ela.dto.request.IntrospectReq;
-import com.mdd.ela.dto.response.DataResponse;
+import com.mdd.ela.dto.request.AuthenticationRequest;
+import com.mdd.ela.dto.request.IntrospectRequest;
+import com.mdd.ela.dto.response.APIResponse;
 import com.mdd.ela.service.AuthenticateService;
 import com.nimbusds.jose.JOSEException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -28,17 +30,19 @@ import java.text.ParseException;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 @Slf4j
+@Tag(name = "Authentication")
 public class AuthenticateController {
     AuthenticateService service;
+    @Operation(summary = "Login")
     @PostMapping("login")
-    ResponseEntity<Object> authenticate(@RequestBody AuthenticationReq req) throws JOSEException {
-        DataResponse dataResponse = service.authenticate(req);
-        return new ResponseEntity<>(dataResponse, HttpStatus.OK);
+    ResponseEntity<APIResponse> authenticate(@RequestBody AuthenticationRequest req) throws JOSEException {
+        APIResponse response = service.authenticate(req);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("introspect")
-    ResponseEntity<Object> authenticate(@RequestBody IntrospectReq req) throws JOSEException, ParseException {
+    ResponseEntity<APIResponse> authenticate(@RequestBody IntrospectRequest req) throws JOSEException, ParseException {
 
-        DataResponse dataResponse = service.authenticate(req);
-        return new ResponseEntity<>(dataResponse, HttpStatus.OK);    }
+        APIResponse response = service.authenticate(req);
+        return new ResponseEntity<>(response, HttpStatus.OK);    }
 }

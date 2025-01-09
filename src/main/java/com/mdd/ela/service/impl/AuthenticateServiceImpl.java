@@ -1,15 +1,15 @@
 package com.mdd.ela.service.impl;
 
 import com.mdd.ela.dto.model.Account;
-import com.mdd.ela.dto.request.AuthenticationReq;
-import com.mdd.ela.dto.request.IntrospectReq;
-import com.mdd.ela.dto.response.DataResponse;
+import com.mdd.ela.dto.request.AuthenticationRequest;
+import com.mdd.ela.dto.request.IntrospectRequest;
+import com.mdd.ela.dto.response.APIResponse;
 import com.mdd.ela.dto.response.auth.AuthenticationRes;
 import com.mdd.ela.dto.response.auth.IntrospectRes;
 import com.mdd.ela.exception.ElaRuntimeException;
-import com.mdd.ela.exception.ElaValidateException;
 import com.mdd.ela.repository.AccountRepository;
 import com.mdd.ela.service.AuthenticateService;
+import com.mdd.ela.util.ErrorCode;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
@@ -45,37 +45,38 @@ public class AuthenticateServiceImpl implements AuthenticateService {
     protected String SIGNER_KEY;
 
     @Override
-    public DataResponse authenticate(AuthenticationReq req) throws JOSEException {
-        try{
-            var account = repository.findByEmailAndRole(req.getEmail(),req.getRole());
-            if(account == null){
-                throw new ElaValidateException("emailNotExisted");
+    public APIResponse authenticate(AuthenticationRequest req) throws JOSEException {
+        try {
+            var account = repository.findByEmail(req.getEmail());
+            if (account == null) {
+                throw new ElaRuntimeException(ErrorCode.EMAIL_NOT_FOUND);
             }
-
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
             boolean authenticated = passwordEncoder.matches(req.getPassword(), account.getPassword());
-            if(!authenticated)
-                throw new ElaValidateException("invalidPassword");
+            if (!authenticated)
+                throw new ElaRuntimeException(ErrorCode.WRONG_PASSWORD);
             var token = generateToken(account);
             var authenticationRes = AuthenticationRes.builder()
                     .isAuthenticated(true)
                     .token(token)
                     .build();
-            return DataResponse.builder().data(authenticationRes).build();
-        }catch (Exception e)
-        {throw new ElaRuntimeException(e.getMessage());
+            return APIResponse.success(authenticationRes);
+        } catch (ElaRuntimeException e) {
+            throw e;
+        } catch (Exception e){
+            throw new ElaRuntimeException(e.getMessage());
         }
     }
 
     @Override
-    public DataResponse authenticate(IntrospectReq req) throws JOSEException, ParseException {
+    public APIResponse authenticate(IntrospectRequest req) throws JOSEException, ParseException {
         var token = req.getToken();
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
         SignedJWT signedJWT = SignedJWT.parse(token);
         Date expTime = signedJWT.getJWTClaimsSet().getExpirationTime();
         var verified = signedJWT.verify(verifier);
         var introspectRes = IntrospectRes.builder().valid(verified && expTime.after(new Date())).build();
-        return DataResponse.builder().data(introspectRes).build();
+        return APIResponse.success(introspectRes);
     }
 
     @Override
@@ -86,7 +87,7 @@ public class AuthenticateServiceImpl implements AuthenticateService {
                 .issuer("mdd")
                 .issueTime(new Date())
                 .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
-                .claim("id",account.getId())
+                .claim("id", account.getId())
                 .build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
         JWSObject jwsObject = new JWSObject(header, payload);

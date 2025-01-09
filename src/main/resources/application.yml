@@ -11,6 +11,9 @@ spring:
     multipart:
       max-file-size: 500MB
       max-request-size: 500MB
+#  jackson:
+#    serialization:
+#      ORDER_MAP_ENTRIES_BY_KEYS: true
 
   datasource:
     url: jdbc:mysql://localhost/ela?currentSchema=public

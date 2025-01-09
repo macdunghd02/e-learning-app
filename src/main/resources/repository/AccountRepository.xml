@@ -33,7 +33,7 @@
         <result column="description" property="description"/>
         <result column="active" property="active"/>
         <result column="delete_time" property="deleteTime"/>
-        <result column="avatarUrl" property="avatarUrl"/>
+        <result column="avatar_url" property="avatarUrl"/>
         <result column="role" property="role"/>
 
         <result column="create_time" property="createTime"/>
@@ -50,7 +50,7 @@
         where id = #{id}
     </select>
 
-    <insert id="signUp">
+    <insert id="signUp" useGeneratedKeys="true" keyProperty="id">
         insert into account(
           email
         , password
@@ -74,15 +74,14 @@
         ,   description = #{description}
         ,   avatar_url = #{avatarUrl}
         ,   modify_time = now()
-        ,   modify_user_id = #{modifyUserId}
-        where id = #{modifyUserId}
+        ,   modify_user_id = #{id}
+        where id = #{id}
     </update>
 
 
-    <select id="findByEmailAndRole" resultMap = "account">
+    <select id="findByEmail" resultMap = "account">
         select * from account
         where email = #{email}
-        and role = #{role}
     </select>
 
 
@@ -94,8 +93,8 @@
 
     <update id="changePassword">
         update account
-        set password = #{request.newPassword},
-            modify_user_id = #{modifyUserId}
-        where id = #{modifyUserId}
+        set password = #{newPassword},
+            modify_user_id = #{id}
+        where id = #{id}
     </update>
 </mapper>

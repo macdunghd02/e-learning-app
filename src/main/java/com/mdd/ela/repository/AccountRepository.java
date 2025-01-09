@@ -15,9 +15,9 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface AccountRepository{
     int signUp(SignUpRequest request);
-    int changePassword(ChangePasswordRequest request, long modifyUserId);
+    int changePassword(ChangePasswordRequest request);
     AccountResponse getDetail(long id);
     int existsByEmail(String email);
-    Account findByEmailAndRole(String email, String role);
+    Account findByEmail(String email);
     int update(AccountRequest request);
 }

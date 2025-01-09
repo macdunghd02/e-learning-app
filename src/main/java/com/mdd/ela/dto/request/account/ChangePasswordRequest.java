@@ -1,5 +1,6 @@
 package com.mdd.ela.dto.request.account;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +15,8 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ChangePasswordRequest {
+    @JsonIgnore
+    long id;
     String oldPassword;
     String newPassword;
     String confirmNewPassword;

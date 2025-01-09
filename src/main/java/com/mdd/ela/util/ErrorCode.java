@@ -61,8 +61,15 @@ public enum ErrorCode {
     SYSTEM_OTHER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Other System error"),
 
     /* 503 Service Unavailable */
-    SYSTEM_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "서버 문제로 인한 서비스 불가");
+    SYSTEM_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "서버 문제로 인한 서비스 불가"),
 
+
+    /* EMAIL */
+    EMAIL_EXISTED(HttpStatus.CONFLICT,"Email existed"),
+    EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND,"Email not found"),
+
+    /* PASSWORD */
+    WRONG_PASSWORD(HttpStatus.UNAUTHORIZED,"Wrong password");
     private final HttpStatus httpStatus;
     private final String errorMessage;
 }
