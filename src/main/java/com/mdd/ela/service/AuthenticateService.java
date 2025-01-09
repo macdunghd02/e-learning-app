@@ -1,9 +1,9 @@
 package com.mdd.ela.service;
 
 import com.mdd.ela.dto.model.Account;
-import com.mdd.ela.dto.request.AuthenticationReq;
-import com.mdd.ela.dto.request.IntrospectReq;
-import com.mdd.ela.dto.response.DataResponse;
+import com.mdd.ela.dto.request.AuthenticationRequest;
+import com.mdd.ela.dto.request.IntrospectRequest;
+import com.mdd.ela.dto.response.APIResponse;
 import com.nimbusds.jose.JOSEException;
 
 import java.text.ParseException;
@@ -15,7 +15,7 @@ import java.text.ParseException;
  */
 
 public interface AuthenticateService {
-    DataResponse authenticate(AuthenticationReq req) throws JOSEException;
-    DataResponse authenticate(IntrospectReq req) throws JOSEException, ParseException;
+    APIResponse authenticate(AuthenticationRequest req) throws JOSEException;
+    APIResponse authenticate(IntrospectRequest req) throws JOSEException, ParseException;
     String generateToken(Account account) throws JOSEException;
 }

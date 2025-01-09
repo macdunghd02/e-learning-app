@@ -10,8 +10,11 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mdd.ela.dto.request.account.ChangePasswordRequest;
 import com.mdd.ela.dto.request.account.AccountRequest;
 import com.mdd.ela.dto.request.account.SignUpRequest;
+import com.mdd.ela.dto.response.APIResponse;
 import com.mdd.ela.dto.response.BaseResponse;
 import com.mdd.ela.service.AccountService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,32 +33,41 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("${api.prefix}/account")
+@Tag(name = "Account Controller")
 public class AccountController {
     @Autowired
     AccountService service;
     @Autowired
     Cloudinary cloudinary;
 
+    @Operation(summary = "Create account")
     @PostMapping(value = "/sign-up")
     public ResponseEntity<Object> signUp(@RequestBody @Valid SignUpRequest request){
-        BaseResponse baseResponse = service.signUp(request);
-        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
+        APIResponse response = service.signUp(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
+    @Operation(summary = "Select account")
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getDetail(@PathVariable long id){
-        BaseResponse baseResponse = service.getDetail(id);
-        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
+    public ResponseEntity<APIResponse> getDetail(@PathVariable long id){
+        APIResponse response = service.getDetail(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
+    @Operation(summary = "Change password")
     @PutMapping(value = "/change-password/{id}")
-    public ResponseEntity<Object> changePassword(@RequestBody @Valid ChangePasswordRequest request, @PathVariable long id){
-        BaseResponse baseResponse = service.changePassword(request,id);
-        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
+    public ResponseEntity<APIResponse> changePassword(@RequestBody @Valid ChangePasswordRequest request, @PathVariable long id){
+        request.setId(id);
+        APIResponse response = service.changePassword(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(summary = "Update account", description = "accountRequest: {\"firstName\" : \"string\",\n" +
+            "    \"lastName\" : \"string\",\n" +
+            "    \"dob\" : \"2000-01-01\",\n" +
+            "    \"phoneNum\" : \"0123456789\",\n" +
+            "    \"address\" : \"string\",\n" +
+            "    \"description\" : \"string\"}")
     @PutMapping(value = "/update/{id}",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> update(@RequestPart @Valid String accountRequest, @PathVariable long id, MultipartFile file) throws JsonProcessingException {
+    public ResponseEntity<APIResponse> update(@RequestPart @Valid String accountRequest, @PathVariable long id, MultipartFile file) throws JsonProcessingException {
 
         String avatarUrl = saveAvatarUrl(file);
         ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
@@ -63,8 +75,9 @@ public class AccountController {
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         AccountRequest request = objectMapper.readValue(accountRequest, AccountRequest.class);
         request.setAvatarUrl(avatarUrl);
-        BaseResponse baseResponse = service.update(request,id);
-        return new ResponseEntity<>(baseResponse, HttpStatus.OK);
+        request.setId(id);
+        APIResponse response = service.update(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     private String saveAvatarUrl(MultipartFile image) {
@@ -78,5 +91,4 @@ public class AccountController {
             throw new RuntimeException("Error saving image");
         }
     }
-
 }
