@@ -11,9 +11,9 @@ spring:
     multipart:
       max-file-size: 500MB
       max-request-size: 500MB
-#  jackson:
-#    serialization:
-#      ORDER_MAP_ENTRIES_BY_KEYS: true
+  redis:
+    host: 127.0.0.1
+    port: 6379
 
   datasource:
     url: jdbc:mysql://localhost/ela?currentSchema=public
@@ -24,7 +24,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: ela.contact.vn@gmail.com
-    password: Helloela3.
+    password:
     properties:
       mail:
         smtp:

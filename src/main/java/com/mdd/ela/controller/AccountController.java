@@ -15,9 +15,12 @@ import com.mdd.ela.dto.response.APIResponse;
 import com.mdd.ela.dto.response.BaseResponse;
 import com.mdd.ela.exception.AppRuntimeException;
 import com.mdd.ela.service.AccountService;
+import com.mdd.ela.service.BaseRedisService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,11 +28,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author dungmd
@@ -45,16 +50,21 @@ public class AccountController {
     @Autowired
     Cloudinary cloudinary;
     @Autowired
-    private JavaMailSender mailSender;
+    JavaMailSender mailSender;
+    @Autowired
+    BaseRedisService redisService;
+
 
     @Operation(summary = "Create account")
     @PostMapping(value = "/sign-up")
     public ResponseEntity<Object> signUp(@RequestBody @Valid SignUpRequest request, @RequestParam String otp) throws BadRequestException {
-//        if (!otp.equals("storedOtp")) {
-//            throw new BadRequestException("Yêu cầu thất bại");
-//        }
-        APIResponse response = service.signUp(request);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+
+            if (!otp.equals(redisService.get(request.getEmail()).toString())) {
+                throw new BadRequestException("Xác thực OTP không thành công");
+            }
+            APIResponse response = service.signUp(request);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+
     }
 
     @Operation(summary = "Select account")
@@ -110,8 +120,8 @@ public class AccountController {
     public ResponseEntity<APIResponse> sendOtp(@RequestBody @Valid SendOtpRequest request) {
         String email = request.getEmail();
         String otp = generateOTP();  // Tạo OTP ngẫu nhiên
-//        saveOtp(email, otp);
-//        sendOtpEmail(email, otp);  // Gửi OTP qua email
+        redisService.set(email, otp);
+        sendOtpEmail(email, otp);  // Gửi OTP qua email
         return new ResponseEntity<>(APIResponse.success(null, null), HttpStatus.OK);
     }
 
@@ -122,27 +132,29 @@ public class AccountController {
 
     private void sendOtpEmail(String email, String otp) {
         try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom("ela.contact.vn@gmail.com");
-            message.setTo(email);
-            message.setSubject("Your OTP Code for Registration Ela Account");
-            message.setText("Your OTP code is: " + otp);
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+            helper.setFrom("ela.contact.vn@gmail.com");
+            helper.setTo(email);
+            helper.setSubject("Xác minh tài khoản email của bạn");
+            String htmlContent = "<html><body>"
+                    + "<p style='font-family: Arial, sans-serif; font-size: 18px;'>"
+                    + "OTP của bạn là: <b>" + otp + "</b>.</p>"
+                    + "<p style='font-family: Arial, sans-serif; font-size: 14px;'>"
+                    + "Ela sẽ không bao giờ gửi email cho bạn và yêu cầu bạn tiết lộ hoặc xác minh mật khẩu, thẻ tín dụng hoặc số tài khoản ngân hàng của bạn.</p>"
+                    + "<p style='font-family: Arial, sans-serif; font-size: 14px;'>"
+                    + "Nếu bạn nhận được một email đáng ngờ có liên kết cập nhật thông tin tài khoản của mình, đừng nhấp vào liên kết."
+                    + "</p>"
+                    + "<p style='font-family: Arial, sans-serif; font-size: 14px;'>"
+                    + "Thay vào đó, hãy báo cáo email đó cho Ela để điều tra.</p>"
+                    + "</body></html>";
+            helper.setText(htmlContent,true);
 
             mailSender.send(message); // Gửi email
         } catch (Exception e) {
             throw new RuntimeException("Không thể gửi OTP tới email của bạn");
         }
-    }
-
-    private void saveOtp(String email, String otp) {
-        // Lưu OTP vào cache hoặc cơ sở dữ liệu với thời gian hết hạn (ví dụ 5 phút)
-//        otpCache.put(email, otp);  // Sử dụng bộ nhớ đệm tạm thời (ví dụ: Guava Cache, Redis)
-    }
-
-    private String getOtpFromCacheOrDb(String email) {
-        // Truy vấn OTP đã lưu trong cache hoặc DB
-//        return otpCache.get(email);  // Lấy OTP từ bộ nhớ đệm
-        return null;
     }
 }
 
