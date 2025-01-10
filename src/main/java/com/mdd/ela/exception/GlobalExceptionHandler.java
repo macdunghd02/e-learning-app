@@ -36,8 +36,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
 
-    @ExceptionHandler(ElaRuntimeException.class)
-    public ResponseEntity<APIResponse> handleHttpServerErrorException(ElaRuntimeException ex) {
+    @ExceptionHandler(AppRuntimeException.class)
+    public ResponseEntity<APIResponse> handleHttpServerErrorException(AppRuntimeException ex) {
         APIResponse response = APIResponse.builder()
                 .message(ex.getMessage())
                 .statusCode(ex.getStatusCode())

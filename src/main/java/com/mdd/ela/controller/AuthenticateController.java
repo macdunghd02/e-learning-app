@@ -1,8 +1,8 @@
 package com.mdd.ela.controller;
 
 import com.mdd.ela.dto.request.AuthenticationRequest;
-import com.mdd.ela.dto.request.IntrospectRequest;
 import com.mdd.ela.dto.response.APIResponse;
+import com.mdd.ela.dto.response.auth.RefreshTokenRequest;
 import com.mdd.ela.service.AuthenticateService;
 import com.nimbusds.jose.JOSEException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,14 +35,13 @@ public class AuthenticateController {
     AuthenticateService service;
     @Operation(summary = "Login")
     @PostMapping("login")
-    ResponseEntity<APIResponse> authenticate(@RequestBody AuthenticationRequest req) throws JOSEException {
+    ResponseEntity<APIResponse> login(@RequestBody AuthenticationRequest req) throws JOSEException {
         APIResponse response = service.authenticate(req);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-    @PostMapping("introspect")
-    ResponseEntity<APIResponse> authenticate(@RequestBody IntrospectRequest req) throws JOSEException, ParseException {
-
-        APIResponse response = service.authenticate(req);
+    @Operation(summary = "Refresh token")
+    @PostMapping("refresh-token")
+    ResponseEntity<APIResponse> refreshToken(@RequestBody RefreshTokenRequest request) throws JOSEException, ParseException {
+        APIResponse response = service.refreshToken(request.getRefreshToken());
         return new ResponseEntity<>(response, HttpStatus.OK);    }
 }

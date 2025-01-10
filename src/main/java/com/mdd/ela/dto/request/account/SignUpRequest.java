@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
+
 /**
  * @author dungmd
  * @created 12/24/2024 3:15 PM
@@ -17,6 +19,11 @@ import lombok.experimental.FieldDefaults;
 public class SignUpRequest {
     @JsonIgnore
     Long id;
-    String password;
     String email;
+    String password;
+    String firstName;
+    String lastName;
+    LocalDate dob;
+    String phoneNum;
+    String address;
 }

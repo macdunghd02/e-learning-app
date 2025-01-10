@@ -54,11 +54,21 @@
         insert into account(
           email
         , password
+        , first_name
+        , last_name
+        , dob
+        , phone_num
+        , address
         , role
         , create_time)
         values (
         #{email},
         #{password},
+        #{firstName},
+        #{lastName},
+        #{dob},
+        #{phoneNum},
+        #{address},
         'LEARNER',
         now())
     </insert>
@@ -79,7 +89,7 @@
     </update>
 
 
-    <select id="findByEmail" resultMap = "account">
+    <select id="findByEmail" resultMap = "accountResponse">
         select * from account
         where email = #{email}
     </select>
