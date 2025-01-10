@@ -1,7 +1,7 @@
 package com.mdd.ela.util;
 
 
-import com.mdd.ela.exception.ElaRuntimeException;
+import com.mdd.ela.exception.AppRuntimeException;
 import com.mdd.ela.util.constants.ConstantMessages;
 import org.apache.commons.lang3.StringUtils;
 import org.imgscalr.Scalr;
@@ -49,7 +49,7 @@ public class StorageUtil {
             outputImage.flush();
             return newImageFile;
         } catch (IOException e) {
-            throw new ElaRuntimeException("resizeFileError");
+            throw new AppRuntimeException("resizeFileError");
         }
     }
 
@@ -62,7 +62,7 @@ public class StorageUtil {
 
     public static void checkFileExist(String path) {
         if (!Files.exists(Path.of(path))) {
-            throw new ElaRuntimeException("fileNotFound");
+            throw new AppRuntimeException("fileNotFound");
         }
     }
 
@@ -83,9 +83,9 @@ public class StorageUtil {
             FileInputStream fileInputStream = new FileInputStream(file);
             return fileInputStream;
         } catch (FileNotFoundException e) {
-            throw new ElaRuntimeException(ConstantMessages.FILE_NOT_FOUND);
+            throw new AppRuntimeException(ConstantMessages.FILE_NOT_FOUND);
         } catch (IllegalArgumentException e) {
-            throw new ElaRuntimeException(ConstantMessages.FILE_NOT_FOUND);
+            throw new AppRuntimeException(ConstantMessages.FILE_NOT_FOUND);
         }
     }
 }

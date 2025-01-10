@@ -1,12 +1,11 @@
 package com.mdd.ela.service.impl;
 
 import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 import com.mdd.ela.dto.model.Lesson;
 import com.mdd.ela.dto.request.lesson.LessonRequest;
 import com.mdd.ela.dto.response.BaseResponse;
 import com.mdd.ela.dto.response.DataResponse;
-import com.mdd.ela.exception.ElaRuntimeException;
+import com.mdd.ela.exception.AppRuntimeException;
 import com.mdd.ela.repository.LessonRepository;
 import com.mdd.ela.service.LessonService;
 import com.mdd.ela.util.LoggedInUserUtil;
@@ -14,10 +13,8 @@ import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author dungmd
@@ -26,7 +23,7 @@ import java.util.Map;
  */
 
 @Service
-@Transactional(rollbackFor = ElaRuntimeException.class)
+@Transactional(rollbackFor = AppRuntimeException.class)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class LessonServiceImpl implements LessonService {
     LessonRepository repository;
@@ -43,7 +40,7 @@ public class LessonServiceImpl implements LessonService {
             List<Lesson> lessonList = repository.findAll(courseId);
             return DataResponse.builder().data(lessonList).build();
         } catch (Exception e) {
-            throw new ElaRuntimeException(e.getMessage());
+            throw new AppRuntimeException(e.getMessage());
         }
     }
 
@@ -53,7 +50,7 @@ public class LessonServiceImpl implements LessonService {
             Lesson lesson = repository.select(id);
             return DataResponse.builder().data(lesson).build();
         } catch (Exception e) {
-            throw new ElaRuntimeException(e.getMessage());
+            throw new AppRuntimeException(e.getMessage());
         }
     }
 
@@ -64,10 +61,10 @@ public class LessonServiceImpl implements LessonService {
             request.setCreateUserId(userId);
             int res = repository.insert(request);
             if(res != 1)
-                throw new ElaRuntimeException("fail");
+                throw new AppRuntimeException("fail");
             return BaseResponse.simpleSuccess("success");
         } catch (Exception e) {
-            throw new ElaRuntimeException(e.getMessage());
+            throw new AppRuntimeException(e.getMessage());
         }
     }
 

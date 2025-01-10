@@ -16,6 +16,5 @@ import java.text.ParseException;
 
 public interface AuthenticateService {
     APIResponse authenticate(AuthenticationRequest req) throws JOSEException;
-    APIResponse authenticate(IntrospectRequest req) throws JOSEException, ParseException;
-    String generateToken(Account account) throws JOSEException;
+    APIResponse refreshToken(String refreshToken) throws JOSEException, ParseException;
 }

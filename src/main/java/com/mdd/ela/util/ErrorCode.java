@@ -65,11 +65,18 @@ public enum ErrorCode {
 
 
     /* EMAIL */
-    EMAIL_EXISTED(HttpStatus.CONFLICT,"Email existed"),
-    EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND,"Email not found"),
+    EMAIL_EXISTED(HttpStatus.CONFLICT,"Email đã tồn tại"),
+    EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND,"Email không tồn tại"),
 
     /* PASSWORD */
-    WRONG_PASSWORD(HttpStatus.UNAUTHORIZED,"Wrong password");
+    WRONG_PASSWORD(HttpStatus.UNAUTHORIZED,"Sai mật khẩu"),
+
+    /* LOGIN */
+    LOGIN_FAIL(HttpStatus.UNAUTHORIZED,"Đăng nhập thất bại");
+
     private final HttpStatus httpStatus;
     private final String errorMessage;
+
+
+
 }

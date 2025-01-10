@@ -1,12 +1,11 @@
 package com.mdd.ela.service.impl;
 
 import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 import com.mdd.ela.dto.request.course.CourseRequest;
 import com.mdd.ela.dto.request.course.CourseResponse;
 import com.mdd.ela.dto.response.BaseResponse;
 import com.mdd.ela.dto.response.DataResponse;
-import com.mdd.ela.exception.ElaRuntimeException;
+import com.mdd.ela.exception.AppRuntimeException;
 import com.mdd.ela.repository.CourseRepository;
 import com.mdd.ela.service.CourseService;
 import com.mdd.ela.util.LoggedInUserUtil;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author dungmd
@@ -24,7 +22,7 @@ import java.util.Map;
  * @project e-learning-app
  */
 @Service
-@Transactional(rollbackFor = ElaRuntimeException.class)
+@Transactional(rollbackFor = AppRuntimeException.class)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CourseServiceImpl implements CourseService {
 
@@ -43,7 +41,7 @@ public class CourseServiceImpl implements CourseService {
             List<CourseResponse> courseList = repository.getAll();
             return DataResponse.builder().data(courseList).build();
         } catch (Exception e) {
-            throw new ElaRuntimeException(e.getMessage());
+            throw new AppRuntimeException(e.getMessage());
         }
     }
 
@@ -53,7 +51,7 @@ public class CourseServiceImpl implements CourseService {
             CourseResponse course = repository.getDetail(id);
             return DataResponse.builder().data(course).build();
         } catch (Exception e) {
-            throw new ElaRuntimeException(e.getMessage());
+            throw new AppRuntimeException(e.getMessage());
         }
     }
 
@@ -64,10 +62,10 @@ public class CourseServiceImpl implements CourseService {
             request.setAuthorAccountId(userId);
             int res = repository.create(request);
             if(res != 1)
-                throw new ElaRuntimeException("fail");
+                throw new AppRuntimeException("fail");
             return BaseResponse.simpleSuccess("success");
         } catch (Exception e) {
-            throw new ElaRuntimeException(e.getMessage());
+            throw new AppRuntimeException(e.getMessage());
         }
     }
 
@@ -79,10 +77,10 @@ public class CourseServiceImpl implements CourseService {
             request.setId(id);
             int res = repository.update(request);
             if(res != 1)
-                throw new ElaRuntimeException("fail");
+                throw new AppRuntimeException("fail");
             return BaseResponse.simpleSuccess("success");
         } catch (Exception e) {
-            throw new ElaRuntimeException(e.getMessage());
+            throw new AppRuntimeException(e.getMessage());
         }
     }
 
@@ -92,10 +90,10 @@ public class CourseServiceImpl implements CourseService {
         try {
             int res = repository.delete(id);
             if (res != 1)
-                throw new ElaRuntimeException("fail");
+                throw new AppRuntimeException("fail");
             return BaseResponse.simpleSuccess("success");
         } catch (Exception e) {
-            throw new ElaRuntimeException(e.getMessage());
+            throw new AppRuntimeException(e.getMessage());
         }
     }
 

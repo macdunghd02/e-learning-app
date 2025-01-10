@@ -1,33 +1,26 @@
 package com.mdd.ela.service.impl;
 
-import com.mdd.ela.dto.model.Account;
 import com.mdd.ela.dto.request.AuthenticationRequest;
 import com.mdd.ela.dto.request.IntrospectRequest;
+import com.mdd.ela.dto.request.account.AccountResponse;
 import com.mdd.ela.dto.response.APIResponse;
 import com.mdd.ela.dto.response.auth.AuthenticationRes;
-import com.mdd.ela.dto.response.auth.IntrospectRes;
-import com.mdd.ela.exception.ElaRuntimeException;
+import com.mdd.ela.exception.AppRuntimeException;
 import com.mdd.ela.repository.AccountRepository;
 import com.mdd.ela.service.AuthenticateService;
 import com.mdd.ela.util.ErrorCode;
+import com.mdd.ela.util.JwtUtil;
 import com.nimbusds.jose.*;
-import com.nimbusds.jose.crypto.MACSigner;
-import com.nimbusds.jose.crypto.MACVerifier;
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.SignedJWT;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author dungmd
@@ -39,62 +32,44 @@ import java.util.Date;
 @Service
 public class AuthenticateServiceImpl implements AuthenticateService {
     AccountRepository repository;
-
-    @NonFinal
-    @Value("${jwt.signer-key}")
-    protected String SIGNER_KEY;
+    JwtUtil jwtUtil;
 
     @Override
     public APIResponse authenticate(AuthenticationRequest req) throws JOSEException {
-        try {
-            var account = repository.findByEmail(req.getEmail());
+            AccountResponse account = repository.findByEmail(req.getEmail());
             if (account == null) {
-                throw new ElaRuntimeException(ErrorCode.EMAIL_NOT_FOUND);
+                throw new AppRuntimeException(ErrorCode.EMAIL_NOT_FOUND);
             }
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
             boolean authenticated = passwordEncoder.matches(req.getPassword(), account.getPassword());
             if (!authenticated)
-                throw new ElaRuntimeException(ErrorCode.WRONG_PASSWORD);
-            var token = generateToken(account);
-            var authenticationRes = AuthenticationRes.builder()
-                    .isAuthenticated(true)
-                    .token(token)
+                throw new AppRuntimeException(ErrorCode.WRONG_PASSWORD);
+
+
+            AuthenticationRes authenticationRes = AuthenticationRes.builder()
+                    .refreshToken(jwtUtil.generateRefreshToken(req.getEmail(), account.getId()))
+                    .token(jwtUtil.generateAccessToken(req.getEmail(), account.getId()))
                     .build();
-            return APIResponse.success(authenticationRes);
-        } catch (ElaRuntimeException e) {
-            throw e;
-        } catch (Exception e){
-            throw new ElaRuntimeException(e.getMessage());
-        }
+
+            Map<String, Object> res = new HashMap<>();
+            res.put("token", authenticationRes);
+            res.put("user", account);
+            return APIResponse.success(res);
     }
 
     @Override
-    public APIResponse authenticate(IntrospectRequest req) throws JOSEException, ParseException {
-        var token = req.getToken();
-        JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
-        SignedJWT signedJWT = SignedJWT.parse(token);
-        Date expTime = signedJWT.getJWTClaimsSet().getExpirationTime();
-        var verified = signedJWT.verify(verifier);
-        var introspectRes = IntrospectRes.builder().valid(verified && expTime.after(new Date())).build();
-        return APIResponse.success(introspectRes);
-    }
-
-    @Override
-    public String generateToken(Account account) throws JOSEException {
-        JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
-        JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(account.getEmail())
-                .issuer("mdd")
-                .issueTime(new Date())
-                .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))
-                .claim("id", account.getId())
-                .build();
-        Payload payload = new Payload(jwtClaimsSet.toJSONObject());
-        JWSObject jwsObject = new JWSObject(header, payload);
-
-        jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes()));
-        return jwsObject.serialize();
-    }
-
-
-}
+    public APIResponse refreshToken(String refreshToken) throws JOSEException, ParseException {
+            if (jwtUtil.validateToken(refreshToken)) {
+                String email = jwtUtil.extractEmail(refreshToken);
+                AccountResponse account = repository.findByEmail(email);
+                AuthenticationRes authenticationRes = AuthenticationRes.builder()
+                        .refreshToken(jwtUtil.generateRefreshToken(email, account.getId()))
+                        .token(jwtUtil.generateAccessToken(email, account.getId()))
+                        .build();
+                Map<String, Object> res = new HashMap<>();
+                res.put("token", authenticationRes);
+                res.put("user", account);
+                return APIResponse.success(res);
+            }
+            throw new AppRuntimeException(ErrorCode.LOGIN_FAIL);
+}}

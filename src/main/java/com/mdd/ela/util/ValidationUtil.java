@@ -2,7 +2,7 @@ package com.mdd.ela.util;
 
 
 import com.mdd.ela.dto.response.ErrorExcelDto;
-import com.mdd.ela.exception.ElaValidateException;
+import com.mdd.ela.exception.AppRuntimeException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -87,10 +87,10 @@ public final class ValidationUtil {
             Date dateFrom = new SimpleDateFormat(DATE_FORMAT).parse(stringDateFrom);
             Date dateTo = new SimpleDateFormat(DATE_FORMAT).parse(stringDateTo);
             if (dateTo.compareTo(dateFrom) <= 0) {
-                throw new ElaValidateException("duplicatedPeriod");
+                throw new AppRuntimeException("duplicatedPeriod");
             }
         } catch (ParseException e) {
-            throw new ElaValidateException("dateInvalidFormat");
+            throw new AppRuntimeException("dateInvalidFormat");
         }
     }
 
@@ -101,23 +101,23 @@ public final class ValidationUtil {
             startDate = new SimpleDateFormat(DATE_FORMAT).parse(dateFrom);
             endDate = new SimpleDateFormat(DATE_FORMAT).parse(dateTo);
         }catch (Exception e){
-            throw new ElaValidateException("dateInvalidFormat");
+            throw new AppRuntimeException("dateInvalidFormat");
         }
         if(startDate.after(endDate)){
-            throw new ElaValidateException("endDateMustBeAfterStartDate");
+            throw new AppRuntimeException("endDateMustBeAfterStartDate");
         }
     }
     public static void validateRoomLevelCode(String roomLevelCode){
         String regex = "[^@#$%]+";
         if(!roomLevelCode.matches(regex)){
-            throw new ElaValidateException("invalidCode");
+            throw new AppRuntimeException("invalidCode");
         }
     }
 
     public static void validateStringCode(String code){
         String regex = "[a-zA-Z0-9 _-]+";
         if(!code.matches(regex)){
-            throw new ElaValidateException("stringInputOnlyContainsLettersNumbersAndUnderscore");
+            throw new AppRuntimeException("stringInputOnlyContainsLettersNumbersAndUnderscore");
         }
     }
 
@@ -136,12 +136,12 @@ public final class ValidationUtil {
 
     public static Date getDateFromStringDate(String dateString){
         if(null == dateString){
-            throw new ElaValidateException("dateMustNotBeNull");
+            throw new AppRuntimeException("dateMustNotBeNull");
         }
         try{
             return new SimpleDateFormat(DATE_FORMAT).parse(dateString);
         } catch (ParseException e) {
-            throw new ElaValidateException("dateInvalidFormat");
+            throw new AppRuntimeException("dateInvalidFormat");
         }
     }
 

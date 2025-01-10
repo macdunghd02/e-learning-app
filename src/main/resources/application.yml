@@ -20,6 +20,17 @@ spring:
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ela.contact.vn@gmail.com
+    password: Helloela3.
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 mybatis:
   mapper-locations: classpath:repository/*.xml

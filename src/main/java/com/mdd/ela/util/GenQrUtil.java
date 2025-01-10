@@ -7,7 +7,7 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.mdd.ela.exception.ElaRuntimeException;
+import com.mdd.ela.exception.AppRuntimeException;
 import com.mdd.ela.util.constants.Constants;
 
 import java.io.ByteArrayOutputStream;
@@ -51,7 +51,7 @@ public class GenQrUtil {
     public static String genQRTicketNumber(String hex3B) {
         Pattern HEXADECIMAL_PATTERN = Pattern.compile("\\p{XDigit}+");
         if (hex3B.length() != 6 || !HEXADECIMAL_PATTERN.matcher(hex3B).matches()) {
-            throw new ElaRuntimeException("invalidHex3B");
+            throw new AppRuntimeException("invalidHex3B");
         }
         List<String> split = Arrays.asList(hex3B.split("(?<=\\G.{2})"));
         Collections.reverse(split);

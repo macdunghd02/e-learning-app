@@ -29,6 +29,7 @@ import javax.crypto.spec.SecretKeySpec;
 public class SecurityConfig {
     private final String[] WHITE_LIST = {
             "ela/v1/account/sign-up",
+            "ela/v1/account/send-otp",
             "ela/v1/auth/**",
             "/ela/swagger-ui.html",
             "/ela/swagger-ui/**",

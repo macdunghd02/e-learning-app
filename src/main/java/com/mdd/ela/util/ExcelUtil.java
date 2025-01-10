@@ -5,7 +5,7 @@ package com.mdd.ela.util;
 import com.mdd.ela.exception.ExcelCellValidationException;
 import com.mdd.ela.exception.ExcelRowValidationException;
 import com.mdd.ela.exception.ExcelValidationException;
-import com.mdd.ela.exception.ElaValidateException;
+import com.mdd.ela.exception.AppRuntimeException;
 import com.mdd.ela.util.constants.ConstantMessages;
 import com.mdd.ela.util.constants.Constants;
 import lombok.extern.slf4j.Slf4j;
@@ -206,7 +206,7 @@ public class ExcelUtil {
         Workbook workbook = new XSSFWorkbook(fileInputStream);
         Sheet sheet = workbook.getSheetAt(0);
         if (sheet == null || sheet.getRow(0) == null) {
-            throw new ElaValidateException(ConstantMessages.EMPTY_FILE_UPLOADED);
+            throw new AppRuntimeException(ConstantMessages.EMPTY_FILE_UPLOADED);
         }
         List<Row> rowList = IteratorUtils.toList(sheet.rowIterator());
         if (rowList.size() < firstRowOfData) {

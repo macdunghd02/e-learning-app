@@ -18,6 +18,6 @@ public interface AccountRepository{
     int changePassword(ChangePasswordRequest request);
     AccountResponse getDetail(long id);
     int existsByEmail(String email);
-    Account findByEmail(String email);
+    AccountResponse findByEmail(String email);
     int update(AccountRequest request);
 }
