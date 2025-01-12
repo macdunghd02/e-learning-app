@@ -1,6 +1,6 @@
 package com.mdd.ela.controller;
 
-import com.mdd.ela.service.BaseRedisService;
+import com.mdd.ela.service.base.BaseRedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

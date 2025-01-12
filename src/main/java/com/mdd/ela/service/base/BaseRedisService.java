@@ -1,4 +1,4 @@
-package com.mdd.ela.service;
+package com.mdd.ela.service.base;
 
 import java.util.List;
 import java.util.Map;

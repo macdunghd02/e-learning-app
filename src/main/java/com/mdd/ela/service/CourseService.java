@@ -5,6 +5,8 @@ import com.mdd.ela.dto.response.APIResponse;
 import com.mdd.ela.dto.response.BaseResponse;
 import com.mdd.ela.dto.response.DataResponse;
 
+import java.util.Map;
+
 /**
  * @author dungmd
  * @created 1/4/2025 10:14 下午
@@ -12,7 +14,7 @@ import com.mdd.ela.dto.response.DataResponse;
  */
 
 public interface CourseService {
-    APIResponse getAll();
+    APIResponse getAll(Map<String,Object> reqMap);
     APIResponse getDetail(long id);
     APIResponse create(CourseRequest request);
     APIResponse update(CourseRequest request);

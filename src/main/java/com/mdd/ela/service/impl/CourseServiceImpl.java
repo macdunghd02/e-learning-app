@@ -15,12 +15,15 @@ import com.mdd.ela.service.CourseNoteService;
 import com.mdd.ela.service.CourseService;
 import com.mdd.ela.util.ErrorCode;
 import com.mdd.ela.util.LoggedInUserUtil;
+import com.mdd.ela.util.PagingUtil;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -45,9 +48,22 @@ public class CourseServiceImpl implements CourseService {
 
 
     @Override
-    public APIResponse getAll() {
-        List<CourseResponse> courseList = repository.getAll();
-        return APIResponse.success(courseList);
+    public APIResponse getAll(Map<String,Object> reqMap) {
+        int limit = PagingUtil.getLimit((Integer) reqMap.get("pageSize"));
+        int offset = PagingUtil.getOffset((Integer) reqMap.get("pageSize"), (Integer) reqMap.get("pageNum"));
+        reqMap.put("limit", limit);
+        reqMap.put("offset", offset);
+        List<CourseResponse> courseResponseList = repository.getAll(reqMap);
+        int count = repository.getCount(reqMap);
+        for(CourseResponse courseResponse : courseResponseList){
+            courseResponse.setCourseNoteResponseList(courseNoteRepository.getAllByCourseId(courseResponse.getId()));
+        }
+        return APIResponse.success(courseResponseList,Map.of(
+                "timestamp", LocalDateTime.now(),
+                "pageSize", reqMap.get("pageSize"),
+                "pageNum", reqMap.get("pageNum"),
+                "totalRecords", count
+                ));
     }
 
     @Override
@@ -72,13 +88,17 @@ public class CourseServiceImpl implements CourseService {
     public APIResponse update(CourseRequest request) {
         request.setModifyUserId(LoggedInUserUtil.getIdOfLoggedInUser());
         repository.update(request);
+        request.getCourseNoteRequest().setCourseId(request.getId());
+        courseNoteService.saveCourseNotes(request.getCourseNoteRequest());
         CourseResponse courseResponse = repository.getDetail(request.getId());
+        courseResponse.setCourseNoteResponseList(courseNoteRepository.getAllByCourseId(request.getId()));
         return APIResponse.success(courseResponse);
     }
 
     @Override
     public APIResponse delete(long id) {
         repository.delete(id);
+        courseNoteRepository.deleteByCourseId(id);
         return APIResponse.success(null);
     }
 

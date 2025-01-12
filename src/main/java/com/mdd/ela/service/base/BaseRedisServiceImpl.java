@@ -1,10 +1,7 @@
-package com.mdd.ela.service.impl;
+package com.mdd.ela.service.base;
 
-import com.mdd.ela.service.BaseRedisService;
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;

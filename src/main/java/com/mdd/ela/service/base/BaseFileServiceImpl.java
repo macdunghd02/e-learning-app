@@ -1,12 +1,10 @@
-package com.mdd.ela.service.impl;
+package com.mdd.ela.service.base;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.mdd.ela.exception.AppRuntimeException;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -18,15 +16,15 @@ import java.util.Map;
  * @project e-learning-app
  */
 @Service
-@Transactional(rollbackFor = AppRuntimeException.class)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class FileServiceImpl {
+public class BaseFileServiceImpl implements BaseFileService {
     Cloudinary cloudinary;
 
-    public FileServiceImpl(Cloudinary cloudinary) {
+    public BaseFileServiceImpl(Cloudinary cloudinary) {
         this.cloudinary = cloudinary;
     }
 
+    @Override
     public String saveImage(MultipartFile image) {
         try {
             if (image != null) {

@@ -39,9 +39,22 @@
         <result column="create_user_id" property="createUserId"/>
         <result column="modify_time" property="modifyTime"/>
         <result column="modify_user_id" property="modifyUserId"/>
-
-
     </resultMap>
+
+    <sql id="filter">
+        <if test="searchingValue != null and searchingValue != ''">
+            and (upper(c.title) like upper(concat('%',#{searchingValue},'%')))
+        </if>
+        <if test="rootPrice != null and rootPrice != 0">
+            and (c.root_price between #{priceFrom} and #{priceTo})
+        </if>
+        <if test="categoryId != null and categoryId != 0">
+            and c.category_id = #{categoryId}
+        </if>
+        <if test="authorAccountId != null and authorAccountId != 0">
+            and c.author_account_id = #{authAccountId}
+        </if>
+    </sql>
 
     <sql id="categoryTable">
         (select c1.id, c1.code, c1.description from code c1 join code c2 on c1.p_id = c2.id where c2.code = 'CATEGORY')
@@ -50,7 +63,24 @@
     <select id="getAll" resultMap = "courseResponse">
         select c.*
         from course c
+        left join account a on c.author_account_id = a.id
+        left join <include refid="categoryTable"></include> ct on c.category_id = ct.id
+        where true
+        <include refid="filter"></include>
+        limit #{limit}
+        offset #{offset}
 
+    </select>
+
+    <select id="getCount" resultType="int">
+        select count(distinct c.id)
+        from course c
+        left join account a on c.author_account_id = a.id
+        left join <include refid="categoryTable"></include> ct on c.category_id = ct.id
+        where true
+        <include refid="filter"></include>
+        limit #{limit}
+        offset #{offset}
     </select>
 
     <select id="getDetail" resultMap="courseResponse">
@@ -92,7 +122,7 @@
         set
         title = #{title}
         ,   description = #{description}
-        ,   profile_image = #{profileImage}
+        ,   avatar_url = #{avatarUrl}
         ,   root_price = #{rootPrice}
         ,   active = #{active}
         ,   type = #{type}
