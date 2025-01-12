@@ -24,7 +24,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: ela.contact.vn@gmail.com
-    password:
+    password: xshl yshj behm tkqa
     properties:
       mail:
         smtp:
@@ -47,7 +47,7 @@ openapi:
     api-docs: api-service
     title: ELA API document
     version: v1
-    server: http://192.168.0.113:8080
+    server: http://127.0.0.1:8080
 
 springdoc:
   api-docs:

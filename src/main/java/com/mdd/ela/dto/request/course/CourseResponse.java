@@ -23,4 +23,5 @@ public class CourseResponse extends Course {
     String totalTime;
     List<RatingResultForm> ratingResultFormList;
     String categoryName;
+    List<CourseNoteResponse> courseNoteResponseList;
 }

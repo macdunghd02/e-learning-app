@@ -71,8 +71,10 @@ public enum ErrorCode {
     /* PASSWORD */
     WRONG_PASSWORD(HttpStatus.UNAUTHORIZED,"Sai mật khẩu"),
 
+    REQUEST_FAILED(HttpStatus.INTERNAL_SERVER_ERROR,"Yêu cầu thất bại"),
+
     /* LOGIN */
-    LOGIN_FAIL(HttpStatus.UNAUTHORIZED,"Đăng nhập thất bại");
+    LOGIN_FAILED(HttpStatus.UNAUTHORIZED,"Đăng nhập thất bại");
 
     private final HttpStatus httpStatus;
     private final String errorMessage;

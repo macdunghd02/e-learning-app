@@ -12,15 +12,13 @@ import com.mdd.ela.dto.request.account.AccountRequest;
 import com.mdd.ela.dto.request.account.SendOtpRequest;
 import com.mdd.ela.dto.request.account.SignUpRequest;
 import com.mdd.ela.dto.response.APIResponse;
-import com.mdd.ela.dto.response.BaseResponse;
-import com.mdd.ela.exception.AppRuntimeException;
+
 import com.mdd.ela.service.AccountService;
 import com.mdd.ela.service.BaseRedisService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -64,12 +62,11 @@ public class AccountController {
             }
             APIResponse response = service.signUp(request);
             return new ResponseEntity<>(response, HttpStatus.OK);
-
     }
 
-    @Operation(summary = "Select account")
+    @Operation(summary = "get account detail")
     @GetMapping("/{id}")
-    public ResponseEntity<APIResponse> getDetail(@PathVariable long id) {
+    public ResponseEntity<APIResponse> getAccountDetail(@PathVariable long id) {
         APIResponse response = service.getDetail(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

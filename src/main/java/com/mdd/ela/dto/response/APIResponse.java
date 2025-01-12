@@ -39,9 +39,8 @@ public class APIResponse {
                 .message("Request processed successfully")
                 .statusCode(200)
                 .result(result)
-                .metaData(Map.of(
-                        "timestamp", LocalDateTime.now()
-                )).build();
+                .metaData(metaData)
+                .build();
     }
 
     public static APIResponse error(Integer statusCode, String message) {

@@ -1,6 +1,7 @@
 package com.mdd.ela.service;
 
 import com.mdd.ela.dto.request.course.CourseRequest;
+import com.mdd.ela.dto.response.APIResponse;
 import com.mdd.ela.dto.response.BaseResponse;
 import com.mdd.ela.dto.response.DataResponse;
 
@@ -11,9 +12,9 @@ import com.mdd.ela.dto.response.DataResponse;
  */
 
 public interface CourseService {
-    DataResponse getAll();
-    DataResponse getDetail(long id);
-    BaseResponse create(CourseRequest request);
-    BaseResponse update(long id,CourseRequest request);
-    BaseResponse delete(long id);
+    APIResponse getAll();
+    APIResponse getDetail(long id);
+    APIResponse create(CourseRequest request);
+    APIResponse update(CourseRequest request);
+    APIResponse delete(long id);
 }

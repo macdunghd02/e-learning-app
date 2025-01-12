@@ -4,8 +4,7 @@
         <result column="id" property="id"/>
         <result column="email" property="email"/>
         <result column="password" property="password"/>
-        <result column="first_name" property="firstName"/>
-        <result column="last_name" property="lastName"/>
+        <result column="full_name" property="fullName"/>
         <result column="dob" property="dob"/>
         <result column="phone_num" property="phoneNum"/>
         <result column="address" property="address"/>
@@ -25,8 +24,7 @@
         <result column="id" property="id"/>
         <result column="email" property="email"/>
         <result column="password" property="password"/>
-        <result column="first_name" property="firstName"/>
-        <result column="last_name" property="lastName"/>
+        <result column="full_name" property="fullName"/>
         <result column="dob" property="dob"/>
         <result column="phone_num" property="phoneNum"/>
         <result column="address" property="address"/>
@@ -54,8 +52,7 @@
         insert into account(
           email
         , password
-        , first_name
-        , last_name
+        , full_name
         , dob
         , phone_num
         , address
@@ -64,8 +61,7 @@
         values (
         #{email},
         #{password},
-        #{firstName},
-        #{lastName},
+        #{fullName},
         #{dob},
         #{phoneNum},
         #{address},
@@ -76,8 +72,7 @@
     <update id="update" >
         update account
         set
-        first_name = #{firstName}
-        ,   last_name = #{lastName}
+        full_name = #{fullName}
         ,   dob = #{dob}
         ,   phone_num = #{phoneNum}
         ,   address = #{address}

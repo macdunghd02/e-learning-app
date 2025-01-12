@@ -1,8 +1,11 @@
 package com.mdd.ela.controller;
 
 import com.mdd.ela.dto.request.course.CourseRequest;
+import com.mdd.ela.dto.response.APIResponse;
 import com.mdd.ela.dto.response.BaseResponse;
 import com.mdd.ela.service.CourseService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,43 +13,40 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("${api.prefix}/course")
+@Tag(name = "Course Controller")
 public class CourseController {
 
     @Autowired
-    private CourseService courseService;
+    private CourseService service;
 
-    // Create a new course
+    @Operation(summary = "Create course")
     @PostMapping
-    public ResponseEntity<BaseResponse> create(@RequestBody CourseRequest request) {
-        var response = courseService.create(request);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ResponseEntity<APIResponse> create(@RequestBody CourseRequest request) {
+        return new ResponseEntity<>(service.create(request), HttpStatus.OK);
     }
 
-    // Update an existing course
+    @Operation(summary = "Update course")
     @PutMapping("/{id}")
-    public ResponseEntity<BaseResponse> update(@PathVariable long id, @RequestBody CourseRequest request) {
-        var response = courseService.update(id, request);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<APIResponse> update(@PathVariable long id, @RequestBody CourseRequest request) {
+        request.setId(id);
+        return new ResponseEntity<>(service.update(request), HttpStatus.OK);
     }
 
-    // Delete a course by ID
+    @Operation(summary = "Delete course")
     @DeleteMapping("/{id}")
-    public ResponseEntity<BaseResponse> delete(@PathVariable long id) {
-        var response = courseService.delete(id);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<APIResponse> delete(@PathVariable long id) {
+        return new ResponseEntity<>(service.delete(id), HttpStatus.OK);
     }
 
-    // Get details of a course by ID
+    @Operation(summary = "Get course detail")
     @GetMapping("/{id}")
-    public ResponseEntity<BaseResponse> getCourseDetails(@PathVariable long id) {
-        var response = courseService.getDetail(id);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<APIResponse> getCourseDetails(@PathVariable long id) {
+        return new ResponseEntity<>(service.getDetail(id), HttpStatus.OK);
     }
 
-    // List all courses
+    @Operation(summary = "Get all course")
     @GetMapping
-    public ResponseEntity<BaseResponse> getAllCourses() {
-        var response = courseService.getAll();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<APIResponse> getAllCourses() {
+        return new ResponseEntity<>(service.getAll(), HttpStatus.OK);
     }
 }
