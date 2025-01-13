@@ -13,8 +13,8 @@ import com.mdd.ela.dto.response.APIResponse;
 
 import com.mdd.ela.service.AccountService;
 import com.mdd.ela.service.base.BaseRedisService;
-import com.mdd.ela.service.base.BaseFileService;
 import com.mdd.ela.service.base.BaseMailService;
+import com.mdd.ela.service.base.BaseS3Service;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -38,7 +38,7 @@ public class AccountController {
     @Autowired
     AccountService service;
     @Autowired
-    BaseFileService baseFileService;
+    BaseS3Service baseS3Service;
     @Autowired
     BaseMailService baseMailService;
     @Autowired
@@ -79,7 +79,7 @@ public class AccountController {
     @PutMapping(value = "/update/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<APIResponse> update(@RequestPart @Valid String accountRequest, @PathVariable long id, MultipartFile file) throws JsonProcessingException {
 
-        String avatarUrl = baseFileService.saveImage(file);
+        String avatarUrl = baseS3Service.saveFile(file,"image");
         ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .registerModule(new JavaTimeModule())
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
