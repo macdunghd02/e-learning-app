@@ -16,9 +16,6 @@
         <result column="modify_time" property="modifyTime"/>
         <result column="modify_user_id" property="modifyUserId"/>
 
-        <collection property="effect" ofType="java.lang.String">
-            <result column="effect"/>
-        </collection>
     </resultMap>
 
     <resultMap id="courseResponse" type="com.mdd.ela.dto.request.course.CourseResponse">
@@ -28,7 +25,7 @@
         <result column="description" property="description"/>
         <result column="avatar_url" property="avatarUrl"/>
         <result column="root_price" property="rootPrice"/>
-        <result column="name" property="authorName"/>
+        <result column="full_name" property="authorName"/>
         <result column="num_of_lesson" property="numOfLesson"/>
         <result column="active" property="active"/>
         <result column="type" property="type"/>
@@ -36,44 +33,65 @@
         <result column="category_name" property="categoryName"/>
 
 
+
+
         <result column="create_time" property="createTime"/>
         <result column="create_user_id" property="createUserId"/>
         <result column="modify_time" property="modifyTime"/>
         <result column="modify_user_id" property="modifyUserId"/>
-
-
-        <collection property="effect" ofType="java.lang.String">
-            <result column="effect"/>
-        </collection>
     </resultMap>
 
+    <sql id="filter">
+        <if test="searchingValue != null and searchingValue != ''">
+            and (upper(c.title) like upper(concat('%',#{searchingValue},'%')))
+        </if>
+        <if test="rootPrice != null and rootPrice != 0">
+            and (c.root_price between #{priceFrom} and #{priceTo})
+        </if>
+        <if test="categoryId != null and categoryId != 0">
+            and c.category_id = #{categoryId}
+        </if>
+        <if test="authorAccountId != null and authorAccountId != 0">
+            and c.author_account_id = #{authAccountId}
+        </if>
+    </sql>
+
     <sql id="categoryTable">
-        select c1.id, c1.code, c1.description from code c1 join code c2 on c1.p_id = c2.id where c2.code = 'CATEGORY'
+        (select c1.id, c1.code, c1.description from code c1 join code c2 on c1.p_id = c2.id where c2.code = 'CATEGORY')
     </sql>
 
     <select id="getAll" resultMap = "courseResponse">
-        select c.*, ce.effect, concat(a.first_name,' ', a.last_name) as name, tmp.num_of_lesson as numOflesson,
-        ct.description as category_name
+        select c.*
         from course c
-        left join course_effect ce on c.id = ce.course_id
-        left join account a on c.account_id = a.id
-        left join (select count(id) as num_of_lesson, course_id from lesson v group by course_id) tmp on c.id = tmp.course_id
-        left join   (<include refid="categoryTable"></include>) ct on c.category_id = ct.id
+        left join account a on c.author_account_id = a.id
+        left join <include refid="categoryTable"></include> ct on c.category_id = ct.id
+        where true
+        <include refid="filter"></include>
+        limit #{limit}
+        offset #{offset}
 
+    </select>
+
+    <select id="getCount" resultType="int">
+        select count(distinct c.id)
+        from course c
+        left join account a on c.author_account_id = a.id
+        left join <include refid="categoryTable"></include> ct on c.category_id = ct.id
+        where true
+        <include refid="filter"></include>
+        limit #{limit}
+        offset #{offset}
     </select>
 
     <select id="getDetail" resultMap="courseResponse">
-        select c.*, ce.effect, concat(a.first_name,' ', a.last_name) as name, tmp.num_of_lesson as numOflesson,
-        ct.description as category_name
+        select c.*,a.full_name,ct.description as category_name
         from course c
-        left join course_effect ce on c.id = ce.course_id
-        left join account a on c.account_id = a.id
-        left join (select count(id) as num_of_lesson, course_id from lesson v group by course_id) tmp on c.id = tmp.course_id
-        left join   (<include refid="categoryTable"></include>) ct on c.category_id = ct.id
+        left join account a on c.author_account_id = a.id
+        left join <include refid="categoryTable"></include> ct on c.category_id = ct.id
         where c.id = #{id}
     </select>
 
-    <insert id="create">
+    <insert id="create" useGeneratedKeys="true" keyProperty="id">
         insert into course(
         title
         , author_account_id
@@ -104,7 +122,7 @@
         set
         title = #{title}
         ,   description = #{description}
-        ,   profile_image = #{profileImage}
+        ,   avatar_url = #{avatarUrl}
         ,   root_price = #{rootPrice}
         ,   active = #{active}
         ,   type = #{type}

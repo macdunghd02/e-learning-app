@@ -16,15 +16,15 @@ spring:
     port: 6379
 
   datasource:
-    url: jdbc:mysql://localhost/ela?currentSchema=public
-    username: root
-    password: 123456
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ela.contact.vn@gmail.com
-    password:
+    username: ${SPRING_MAIL_USERNAME}
+    password: ${SPRING_MAIL_PASSWORD}
     properties:
       mail:
         smtp:
@@ -40,14 +40,14 @@ api:
   prefix: /ela/v1
 
 jwt:
-  signer-key: "hRvc9cgVqAb6QgI7lLllt+PoEQ2U9AwlUXvCqB7rBvUsRLpmzdE+/WdbvqfwlJWO"
+  signer-key: ${JWT_SIGNER_KEY}
 
 openapi:
   service:
     api-docs: api-service
     title: ELA API document
     version: v1
-    server: http://192.168.0.113:8080
+    server: http://127.0.0.1:8080
 
 springdoc:
   api-docs:

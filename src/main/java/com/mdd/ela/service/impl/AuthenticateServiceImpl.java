@@ -71,5 +71,5 @@ public class AuthenticateServiceImpl implements AuthenticateService {
                 res.put("user", account);
                 return APIResponse.success(res);
             }
-            throw new AppRuntimeException(ErrorCode.LOGIN_FAIL);
+            throw new AppRuntimeException(ErrorCode.LOGIN_FAILED);
 }}

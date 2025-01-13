@@ -1,0 +1,24 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdd.ela.repository.CodeRepository">
+    <resultMap id="codeResponse" type="com.mdd.ela.dto.request.code.CodeResponse">
+        <result column="id" property="id"/>
+        <result column="code" property="code"/>
+        <result column="desc" property="desc"/>
+    </resultMap>
+
+
+    <sql id="getPId">
+        select id from code where code.code like #{pCode}
+    </sql>
+    <sql id="tableByPId">
+        select c1.* from code c1 join code c2 on c1.p_id = c2.id
+        where c2.code like #{pCode}
+    </sql>
+
+    <select id="getByPCode">
+        (<include refid="tableByPId"></include>)
+        order by id
+    </select>
+
+
+</mapper>

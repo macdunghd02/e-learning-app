@@ -1,11 +1,8 @@
 package com.mdd.ela.dto.model;
 
 import com.mdd.ela.dto.simple.BaseDto;
-import com.mdd.ela.util.validation.EmailPattern;
-import com.mdd.ela.util.validation.PhoneNumberPattern;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import java.util.List;
 
 /**
  * @author dungmd
@@ -22,7 +19,7 @@ public class Course extends BaseDto {
     String title;
     long authorAccountId;
     String description;
-    List<String> effect;
+//    CourseNote courseNote;
     String avatarUrl;
     int rootPrice;
     int active;

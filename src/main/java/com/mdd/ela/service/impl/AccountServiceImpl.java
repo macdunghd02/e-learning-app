@@ -35,63 +35,34 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public APIResponse signUp(SignUpRequest request) {
-        try {
-            if (repository.existsByEmail(request.getEmail()) != 0)
-                throw new AppRuntimeException(ErrorCode.EMAIL_EXISTED);
-            request.setPassword(encoder.encode(request.getPassword()));
-            repository.signUp(request);
-            AccountResponse accountResponse = repository.getDetail(request.getId());
-            return APIResponse.success(accountResponse);
-        } catch (AppRuntimeException e) {
-            throw e;
-        } catch (Exception e){
-            throw new AppRuntimeException(e.getMessage());
-        }
+        if (repository.existsByEmail(request.getEmail()) != 0)
+            throw new AppRuntimeException(ErrorCode.EMAIL_EXISTED);
+        request.setPassword(encoder.encode(request.getPassword()));
+        repository.signUp(request);
+        AccountResponse accountResponse = repository.getDetail(request.getId());
+        return APIResponse.success(accountResponse);
     }
 
     @Override
     public APIResponse getDetail(long id) {
-        try {
-            AccountResponse response = repository.getDetail(id);
-            return APIResponse.success(response);
-        } catch (AppRuntimeException e) {
-            throw e;
-        } catch (Exception e){
-            throw new AppRuntimeException(e.getMessage());
-        }
+        AccountResponse response = repository.getDetail(id);
+        return APIResponse.success(response);
     }
 
     @Override
     public APIResponse changePassword(ChangePasswordRequest request) {
-        try {
-            AccountResponse currentAcc = repository.getDetail(request.getId());
-            String en = encoder.encode(request.getOldPassword());
-            if(!encoder.matches(request.getOldPassword(), currentAcc.getPassword()))
-                throw new AppRuntimeException(ErrorCode.WRONG_PASSWORD);
-            request.setNewPassword(encoder.encode(request.getNewPassword()));
-            int result = repository.changePassword(request);
-            if (result != 1)
-                throw new AppRuntimeException("Request fail");
-            return APIResponse.success(null);
-        } catch (AppRuntimeException e) {
-            throw e;
-        } catch (Exception e){
-            throw new AppRuntimeException(e.getMessage());
-        }
+        AccountResponse currentAcc = repository.getDetail(request.getId());
+        if (!encoder.matches(request.getOldPassword(), currentAcc.getPassword()))
+            throw new AppRuntimeException(ErrorCode.WRONG_PASSWORD);
+        request.setNewPassword(encoder.encode(request.getNewPassword()));
+        repository.changePassword(request);
+        return APIResponse.success(null);
     }
 
     @Override
     public APIResponse update(AccountRequest request) {
-        try {
-            int result = repository.update(request);
-            AccountResponse accountResponse = repository.getDetail(request.getId());
-            if (result != 1)
-                throw new AppRuntimeException("Request fail");
-            return APIResponse.success(accountResponse);
-        } catch (AppRuntimeException e) {
-            throw e;
-        } catch (Exception e){
-            throw new AppRuntimeException(e.getMessage());
-        }
+        repository.update(request);
+        AccountResponse accountResponse = repository.getDetail(request.getId());
+        return APIResponse.success(accountResponse);
     }
 }

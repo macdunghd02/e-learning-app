@@ -28,8 +28,7 @@ public class Account extends BaseDto {
     @EmailPattern
     String email;
     String password;
-    String firstName;
-    String lastName;
+    String fullName;
     @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate dob;
     @PhoneNumberPattern

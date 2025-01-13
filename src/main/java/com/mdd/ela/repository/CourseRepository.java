@@ -5,6 +5,7 @@ import com.mdd.ela.dto.request.course.CourseResponse;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author dungmd
@@ -13,7 +14,8 @@ import java.util.List;
  */
 @Mapper
 public interface CourseRepository {
-    List<CourseResponse> getAll();
+    List<CourseResponse> getAll(Map<String,Object> reqMap);
+    int getCount(Map<String,Object> reqMap);
     CourseResponse getDetail(long id);
     int create(CourseRequest request);
     int update(CourseRequest request);
