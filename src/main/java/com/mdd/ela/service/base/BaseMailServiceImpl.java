@@ -27,7 +27,7 @@ public class BaseMailServiceImpl implements BaseMailService {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-            helper.setFrom("Ela Learn");
+            helper.setFrom("ela.contact.vn@gmail.com");
             helper.setTo(email);
             helper.setSubject("Xác minh tài khoản email của bạn");
             String htmlContent = "<html><body>"
