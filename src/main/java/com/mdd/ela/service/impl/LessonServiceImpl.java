@@ -1,10 +1,10 @@
 package com.mdd.ela.service.impl;
 
 import com.cloudinary.Cloudinary;
-import com.mdd.ela.dto.model.Lesson;
-import com.mdd.ela.dto.request.lesson.LessonRequest;
-import com.mdd.ela.dto.response.BaseResponse;
-import com.mdd.ela.dto.response.DataResponse;
+import com.mdd.ela.model.entity.Lesson;
+import com.mdd.ela.dto.lesson.LessonRequest;
+import com.mdd.ela.model.base.BaseResponse;
+import com.mdd.ela.model.base.DataResponse;
 import com.mdd.ela.exception.AppRuntimeException;
 import com.mdd.ela.repository.LessonRepository;
 import com.mdd.ela.service.LessonService;
@@ -27,12 +27,11 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class LessonServiceImpl implements LessonService {
     LessonRepository repository;
-    Cloudinary cloudinary;
 
-    public LessonServiceImpl(LessonRepository repository, Cloudinary cloudinary) {
+    public LessonServiceImpl(LessonRepository repository) {
         this.repository = repository;
-        this.cloudinary = cloudinary;
     }
+
 
     @Override
     public DataResponse getAll(long courseId) {

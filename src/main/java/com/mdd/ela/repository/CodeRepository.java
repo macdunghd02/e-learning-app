@@ -1,6 +1,6 @@
 package com.mdd.ela.repository;
 
-import com.mdd.ela.dto.request.code.CodeResponse;
+import com.mdd.ela.dto.code.CodeResponse;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

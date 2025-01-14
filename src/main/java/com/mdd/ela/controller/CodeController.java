@@ -1,19 +1,14 @@
 package com.mdd.ela.controller;
 
-import com.mdd.ela.dto.response.APIResponse;
+import com.mdd.ela.model.base.APIResponse;
 import com.mdd.ela.service.CodeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
-import org.apache.ibatis.annotations.Options;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

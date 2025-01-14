@@ -1,14 +1,13 @@
 package com.mdd.ela.service.impl;
 
-import com.mdd.ela.dto.request.AuthenticationRequest;
-import com.mdd.ela.dto.request.IntrospectRequest;
-import com.mdd.ela.dto.request.account.AccountResponse;
-import com.mdd.ela.dto.response.APIResponse;
-import com.mdd.ela.dto.response.auth.AuthenticationRes;
+import com.mdd.ela.dto.auth.AuthenticationRequest;
+import com.mdd.ela.dto.account.AccountResponse;
+import com.mdd.ela.model.base.APIResponse;
+import com.mdd.ela.dto.auth.AuthenticationResponse;
 import com.mdd.ela.exception.AppRuntimeException;
 import com.mdd.ela.repository.AccountRepository;
 import com.mdd.ela.service.AuthenticateService;
-import com.mdd.ela.util.ErrorCode;
+import com.mdd.ela.util.constants.ErrorCode;
 import com.mdd.ela.util.JwtUtil;
 import com.nimbusds.jose.*;
 import lombok.AccessLevel;
@@ -46,13 +45,13 @@ public class AuthenticateServiceImpl implements AuthenticateService {
                 throw new AppRuntimeException(ErrorCode.WRONG_PASSWORD);
 
 
-            AuthenticationRes authenticationRes = AuthenticationRes.builder()
+            AuthenticationResponse authenticationResponse = AuthenticationResponse.builder()
                     .refreshToken(jwtUtil.generateRefreshToken(req.getEmail(), account.getId()))
                     .token(jwtUtil.generateAccessToken(req.getEmail(), account.getId()))
                     .build();
 
             Map<String, Object> res = new HashMap<>();
-            res.put("token", authenticationRes);
+            res.put("token", authenticationResponse);
             res.put("user", account);
             return APIResponse.success(res);
     }
@@ -62,12 +61,12 @@ public class AuthenticateServiceImpl implements AuthenticateService {
             if (jwtUtil.validateToken(refreshToken)) {
                 String email = jwtUtil.extractEmail(refreshToken);
                 AccountResponse account = repository.findByEmail(email);
-                AuthenticationRes authenticationRes = AuthenticationRes.builder()
+                AuthenticationResponse authenticationResponse = AuthenticationResponse.builder()
                         .refreshToken(jwtUtil.generateRefreshToken(email, account.getId()))
                         .token(jwtUtil.generateAccessToken(email, account.getId()))
                         .build();
                 Map<String, Object> res = new HashMap<>();
-                res.put("token", authenticationRes);
+                res.put("token", authenticationResponse);
                 res.put("user", account);
                 return APIResponse.success(res);
             }

@@ -1,6 +1,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mdd.ela.repository.CourseRepository">
-    <resultMap id="course" type="com.mdd.ela.dto.model.Course">
+    <resultMap id="course" type="com.mdd.ela.model.entity.Course">
         <result column="id" property="id"/>
         <result column="title" property="title"/>
         <result column="author_account_id" property="authorAccountId"/>
@@ -18,7 +18,7 @@
 
     </resultMap>
 
-    <resultMap id="courseResponse" type="com.mdd.ela.dto.request.course.CourseResponse">
+    <resultMap id="courseResponse" type="com.mdd.ela.dto.course.CourseResponse">
         <result column="id" property="id"/>
         <result column="title" property="title"/>
         <result column="author_account_id" property="authorAccountId"/>

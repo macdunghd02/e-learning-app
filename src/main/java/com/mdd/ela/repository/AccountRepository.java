@@ -1,10 +1,9 @@
 package com.mdd.ela.repository;
 
-import com.mdd.ela.dto.model.Account;
-import com.mdd.ela.dto.request.account.AccountResponse;
-import com.mdd.ela.dto.request.account.ChangePasswordRequest;
-import com.mdd.ela.dto.request.account.SignUpRequest;
-import com.mdd.ela.dto.request.account.AccountRequest;
+import com.mdd.ela.dto.account.AccountResponse;
+import com.mdd.ela.dto.account.ChangePasswordRequest;
+import com.mdd.ela.dto.account.SignUpRequest;
+import com.mdd.ela.dto.account.AccountRequest;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

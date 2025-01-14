@@ -1,8 +1,8 @@
 package com.mdd.ela.exception;
 
 
-import com.mdd.ela.dto.response.APIResponse;
-import com.mdd.ela.util.ErrorCode;
+import com.mdd.ela.model.base.APIResponse;
+import com.mdd.ela.util.constants.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
@@ -32,7 +32,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .metaData(Map.of(
                         "timestamp", LocalDateTime.now()
                 )).build();
-        return this.toResponseEntity(ErrorCode.SYSTEM_UNAVAILABLE, response);
+        return this.toResponseEntity(ErrorCode.SYSTEM_OTHER_ERROR, response);
     }
 
 

@@ -1,14 +1,14 @@
 package com.mdd.ela.service.impl;
 
-import com.mdd.ela.dto.request.account.AccountResponse;
-import com.mdd.ela.dto.request.account.ChangePasswordRequest;
-import com.mdd.ela.dto.request.account.AccountRequest;
-import com.mdd.ela.dto.request.account.SignUpRequest;
-import com.mdd.ela.dto.response.APIResponse;
+import com.mdd.ela.dto.account.AccountResponse;
+import com.mdd.ela.dto.account.ChangePasswordRequest;
+import com.mdd.ela.dto.account.AccountRequest;
+import com.mdd.ela.dto.account.SignUpRequest;
+import com.mdd.ela.model.base.APIResponse;
 import com.mdd.ela.exception.AppRuntimeException;
 import com.mdd.ela.repository.AccountRepository;
 import com.mdd.ela.service.AccountService;
-import com.mdd.ela.util.ErrorCode;
+import com.mdd.ela.util.constants.ErrorCode;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.crypto.password.PasswordEncoder;

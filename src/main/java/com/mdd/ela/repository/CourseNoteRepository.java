@@ -1,9 +1,7 @@
 package com.mdd.ela.repository;
 
-import com.mdd.ela.dto.model.CourseNote;
-import com.mdd.ela.dto.request.course.CourseNoteResponse;
-import com.mdd.ela.dto.request.course.CourseRequest;
-import com.mdd.ela.dto.request.course.CourseResponse;
+import com.mdd.ela.model.entity.CourseNote;
+import com.mdd.ela.dto.course.CourseNoteResponse;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

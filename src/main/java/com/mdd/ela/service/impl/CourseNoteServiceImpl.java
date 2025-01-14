@@ -1,20 +1,17 @@
 package com.mdd.ela.service.impl;
 
-import com.mdd.ela.dto.model.CourseNote;
-import com.mdd.ela.dto.request.course.CourseNoteRequest;
+import com.mdd.ela.model.entity.CourseNote;
+import com.mdd.ela.dto.course.CourseNoteRequest;
 import com.mdd.ela.exception.AppRuntimeException;
 import com.mdd.ela.repository.CourseNoteRepository;
 import com.mdd.ela.service.CourseNoteService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.AccessType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author dungmd

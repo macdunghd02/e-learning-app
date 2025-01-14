@@ -1,7 +1,6 @@
 package com.mdd.ela.util;
 
 
-import com.mdd.ela.dto.simple.ListQueryDto;
 import com.mdd.ela.util.constants.Constants;
 
 public class PagingUtil {
@@ -47,18 +46,5 @@ public class PagingUtil {
             return 1;
         }
         return pageNum;
-    }
-
-    public static void preparePaging(ListQueryDto req, Integer pageSize, Integer pageNum) {
-        if (pageSize == null || pageNum == null) {
-            req.setLimit(null);
-            req.setOffset(null);
-        } else {
-            int limit = PagingUtil.getLimit(pageSize);
-            int offset = PagingUtil.getOffset(pageSize, pageNum);
-            req.setLimit(limit);
-            req.setOffset(offset);
-        }
-
     }
 }

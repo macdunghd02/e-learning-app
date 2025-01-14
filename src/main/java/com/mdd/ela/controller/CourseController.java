@@ -3,14 +3,10 @@ package com.mdd.ela.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.mdd.ela.dto.request.account.AccountRequest;
-import com.mdd.ela.dto.request.course.CourseRequest;
-import com.mdd.ela.dto.response.APIResponse;
-import com.mdd.ela.dto.response.BaseResponse;
+import com.mdd.ela.dto.course.CourseRequest;
+import com.mdd.ela.model.base.APIResponse;
 import com.mdd.ela.service.CourseService;
-import com.mdd.ela.service.base.BaseFileService;
+import com.mdd.ela.service.base.BaseS3Service;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.DataInput;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +28,7 @@ public class CourseController {
     @Autowired
     private CourseService service;
     @Autowired
-    private BaseFileService baseFileService;
+    private BaseS3Service baseS3Service;
 
     @Operation(summary = "Create course", description = "{\n" +
             "  \"courseRequest\": {\n" +
@@ -58,7 +53,7 @@ public class CourseController {
             "}")
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<APIResponse> create(@RequestPart String courseRequest, MultipartFile file) throws IOException {
-        String avatarUrl = baseFileService.saveImage(file);
+        String avatarUrl = baseS3Service.saveFile(file,"image");
         ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         CourseRequest request = objectMapper.readValue(courseRequest, CourseRequest.class);
         request.setAvatarUrl(avatarUrl);
@@ -88,7 +83,7 @@ public class CourseController {
             "}")
     @PutMapping(value = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<APIResponse> update(@PathVariable long id, @RequestPart String courseRequest, MultipartFile file) throws JsonProcessingException {
-        String avatarUrl = baseFileService.saveImage(file);
+        String avatarUrl = baseS3Service.saveFile(file,"image");
         ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         CourseRequest request = objectMapper.readValue(courseRequest, CourseRequest.class);
         request.setAvatarUrl(avatarUrl);
