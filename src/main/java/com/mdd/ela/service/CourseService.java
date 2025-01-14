@@ -1,9 +1,7 @@
 package com.mdd.ela.service;
 
-import com.mdd.ela.dto.request.course.CourseRequest;
-import com.mdd.ela.dto.response.APIResponse;
-import com.mdd.ela.dto.response.BaseResponse;
-import com.mdd.ela.dto.response.DataResponse;
+import com.mdd.ela.dto.course.CourseRequest;
+import com.mdd.ela.model.base.APIResponse;
 
 import java.util.Map;
 

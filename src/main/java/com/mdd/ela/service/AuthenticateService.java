@@ -1,9 +1,7 @@
 package com.mdd.ela.service;
 
-import com.mdd.ela.dto.model.Account;
-import com.mdd.ela.dto.request.AuthenticationRequest;
-import com.mdd.ela.dto.request.IntrospectRequest;
-import com.mdd.ela.dto.response.APIResponse;
+import com.mdd.ela.dto.auth.AuthenticationRequest;
+import com.mdd.ela.model.base.APIResponse;
 import com.nimbusds.jose.JOSEException;
 
 import java.text.ParseException;

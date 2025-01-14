@@ -1,7 +1,7 @@
 package com.mdd.ela.util;
 
 
-import com.mdd.ela.dto.response.ErrorExcelDto;
+import com.mdd.ela.model.base.ErrorExcelDto;
 import com.mdd.ela.exception.AppRuntimeException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;

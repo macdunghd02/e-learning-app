@@ -1,19 +1,13 @@
 package com.mdd.ela.service.impl;
 
-import com.cloudinary.Cloudinary;
-import com.mdd.ela.dto.model.Course;
-import com.mdd.ela.dto.request.course.CourseNoteRequest;
-import com.mdd.ela.dto.request.course.CourseRequest;
-import com.mdd.ela.dto.request.course.CourseResponse;
-import com.mdd.ela.dto.response.APIResponse;
-import com.mdd.ela.dto.response.BaseResponse;
-import com.mdd.ela.dto.response.DataResponse;
+import com.mdd.ela.dto.course.CourseRequest;
+import com.mdd.ela.dto.course.CourseResponse;
+import com.mdd.ela.model.base.APIResponse;
 import com.mdd.ela.exception.AppRuntimeException;
 import com.mdd.ela.repository.CourseNoteRepository;
 import com.mdd.ela.repository.CourseRepository;
 import com.mdd.ela.service.CourseNoteService;
 import com.mdd.ela.service.CourseService;
-import com.mdd.ela.util.ErrorCode;
 import com.mdd.ela.util.LoggedInUserUtil;
 import com.mdd.ela.util.PagingUtil;
 import lombok.AccessLevel;
@@ -24,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * @author dungmd

@@ -1,7 +1,6 @@
 package com.mdd.ela.service;
 
-import com.mdd.ela.dto.request.course.CourseNoteRequest;
-import org.apache.ibatis.annotations.Mapper;
+import com.mdd.ela.dto.course.CourseNoteRequest;
 
 /**
  * @author dungmd

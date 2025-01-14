@@ -1,19 +1,12 @@
 package com.mdd.ela.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mdd.ela.dto.model.Lesson;
-import com.mdd.ela.dto.request.lesson.LessonRequest;
-import com.mdd.ela.dto.response.BaseResponse;
+import com.mdd.ela.dto.lesson.LessonRequest;
+import com.mdd.ela.model.base.BaseResponse;
 import com.mdd.ela.service.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 /**
  * @author dungmd

@@ -1,11 +1,8 @@
 package com.mdd.ela.service;
 
-import com.mdd.ela.dto.model.Lesson;
-
-import com.mdd.ela.dto.request.lesson.LessonRequest;
-import com.mdd.ela.dto.response.BaseResponse;
-import com.mdd.ela.dto.response.DataResponse;
-import org.springframework.web.multipart.MultipartFile;
+import com.mdd.ela.dto.lesson.LessonRequest;
+import com.mdd.ela.model.base.BaseResponse;
+import com.mdd.ela.model.base.DataResponse;
 
 /**
  * @author dungmd

@@ -1,8 +1,8 @@
 package com.mdd.ela.controller;
 
-import com.mdd.ela.dto.request.AuthenticationRequest;
-import com.mdd.ela.dto.response.APIResponse;
-import com.mdd.ela.dto.response.auth.RefreshTokenRequest;
+import com.mdd.ela.dto.auth.AuthenticationRequest;
+import com.mdd.ela.model.base.APIResponse;
+import com.mdd.ela.dto.auth.RefreshTokenRequest;
 import com.mdd.ela.service.AuthenticateService;
 import com.nimbusds.jose.JOSEException;
 import io.swagger.v3.oas.annotations.Operation;

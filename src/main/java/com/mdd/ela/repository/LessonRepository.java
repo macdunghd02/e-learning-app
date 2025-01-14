@@ -1,6 +1,6 @@
 package com.mdd.ela.repository;
 
-import com.mdd.ela.dto.model.Lesson;
+import com.mdd.ela.model.entity.Lesson;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

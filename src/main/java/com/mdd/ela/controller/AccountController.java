@@ -5,11 +5,11 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.mdd.ela.dto.request.account.ChangePasswordRequest;
-import com.mdd.ela.dto.request.account.AccountRequest;
-import com.mdd.ela.dto.request.account.SendOtpRequest;
-import com.mdd.ela.dto.request.account.SignUpRequest;
-import com.mdd.ela.dto.response.APIResponse;
+import com.mdd.ela.dto.account.ChangePasswordRequest;
+import com.mdd.ela.dto.account.AccountRequest;
+import com.mdd.ela.dto.account.SendOtpRequest;
+import com.mdd.ela.dto.account.SignUpRequest;
+import com.mdd.ela.model.base.APIResponse;
 
 import com.mdd.ela.service.AccountService;
 import com.mdd.ela.service.base.BaseRedisService;

@@ -1,6 +1,6 @@
 package com.mdd.ela.exception;
 
-import com.mdd.ela.util.ErrorCode;
+import com.mdd.ela.util.constants.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

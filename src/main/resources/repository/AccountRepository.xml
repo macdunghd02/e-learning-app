@@ -1,6 +1,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mdd.ela.repository.AccountRepository">
-    <resultMap id="account" type="com.mdd.ela.dto.model.Account">
+    <resultMap id="account" type="com.mdd.ela.model.entity.Account">
         <result column="id" property="id"/>
         <result column="email" property="email"/>
         <result column="password" property="password"/>
@@ -20,7 +20,7 @@
         <result column="modify_user_id" property="modifyUserId"/>
     </resultMap>
 
-    <resultMap id="accountResponse" type="com.mdd.ela.dto.request.account.AccountResponse">
+    <resultMap id="accountResponse" type="com.mdd.ela.dto.account.AccountResponse">
         <result column="id" property="id"/>
         <result column="email" property="email"/>
         <result column="password" property="password"/>

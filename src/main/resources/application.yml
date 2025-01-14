@@ -1,40 +1,34 @@
-server:
-  port: 8080
-  servlet:
-    context-path: /
-spring:
-  application:
-    name: e-learning-app
+redis:
+  host: 127.0.0.1
+  port: 6379
 
+spring:
   profiles:
     active: dev
 
-  servlet:
-    multipart:
-      max-file-size: 500MB
-      max-request-size: 500MB
-
-  redis:
-    host: 127.0.0.1
-    port: 6379
-
   datasource:
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${SPRING_MAIL_USERNAME}
-    password: ${SPRING_MAIL_PASSWORD}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
+
+  flyway:
+    locations: classpath:/db/migration, classpath:/dev/db/migration
+    baseline-on-migrate: true
+    baseline-version: 1
+
 s3:
   access-key: ${S3_ACCESS_KEY}
   secret: ${S3_SECRET}
