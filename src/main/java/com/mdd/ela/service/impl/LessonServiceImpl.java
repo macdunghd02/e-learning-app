@@ -1,6 +1,5 @@
 package com.mdd.ela.service.impl;
 
-import com.cloudinary.Cloudinary;
 import com.mdd.ela.model.entity.Lesson;
 import com.mdd.ela.dto.lesson.LessonRequest;
 import com.mdd.ela.model.base.BaseResponse;
