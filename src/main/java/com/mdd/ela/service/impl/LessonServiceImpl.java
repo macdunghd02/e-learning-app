@@ -1,5 +1,7 @@
 package com.mdd.ela.service.impl;
 
+import com.mdd.ela.dto.lesson.LessonUpdateRequest;
+import com.mdd.ela.model.base.APIResponse;
 import com.mdd.ela.model.entity.Lesson;
 import com.mdd.ela.dto.lesson.LessonRequest;
 import com.mdd.ela.model.base.BaseResponse;
@@ -31,48 +33,29 @@ public class LessonServiceImpl implements LessonService {
         this.repository = repository;
     }
 
-
     @Override
-    public DataResponse getAll(long courseId) {
-        try {
-            List<Lesson> lessonList = repository.findAll(courseId);
-            return DataResponse.builder().data(lessonList).build();
-        } catch (Exception e) {
-            throw new AppRuntimeException(e.getMessage());
-        }
+    public APIResponse getDetail(long id) {
+        return APIResponse.success(repository.getDetail(id));
     }
 
     @Override
-    public DataResponse getDetail(long id) {
-        try {
-            Lesson lesson = repository.select(id);
-            return DataResponse.builder().data(lesson).build();
-        } catch (Exception e) {
-            throw new AppRuntimeException(e.getMessage());
-        }
+    public APIResponse create(LessonRequest request) {
+        long userId = LoggedInUserUtil.getIdOfLoggedInUser();
+        request.setCreateUserId(userId);
+        repository.insert(request);
+        return APIResponse.success(repository.getDetail(request.getId()));
     }
 
     @Override
-    public BaseResponse create(LessonRequest request) {
-        try {
-            long userId = LoggedInUserUtil.getIdOfLoggedInUser();
-            request.setCreateUserId(userId);
-            int res = repository.insert(request);
-            if(res != 1)
-                throw new AppRuntimeException("fail");
-            return BaseResponse.simpleSuccess("success");
-        } catch (Exception e) {
-            throw new AppRuntimeException(e.getMessage());
-        }
+    public APIResponse update(LessonUpdateRequest request) {
+        long userId = LoggedInUserUtil.getIdOfLoggedInUser();
+        request.setModifyUserId(userId);
+        repository.update(request);
+        return APIResponse.success(repository.getDetail(request.getId()));
     }
 
     @Override
-    public BaseResponse update(long id,LessonRequest request) {
-        return null;
-    }
-
-    @Override
-    public BaseResponse delete(long id) {
-        return null;
+    public APIResponse delete(long id) {
+        return APIResponse.success(repository.delete(id));
     }
 }
