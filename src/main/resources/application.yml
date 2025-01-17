@@ -5,6 +5,11 @@ spring:
   profiles:
     active: dev
 
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
   datasource:
     url: ${DATASOURCE_URL}
     username: ${DATASOURCE_USERNAME}
@@ -65,7 +70,7 @@ security:
     signer-key: ${JWT_SIGNER_KEY}
   white-list:
     ela/v1/test/**
-    , la/v1/account/sign-up
+    , ela/v1/account/sign-up
     , ela/v1/account/send-otp
     , ela/v1/auth/**
     , /ela/swagger-ui.html

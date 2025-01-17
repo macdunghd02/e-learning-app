@@ -1,8 +1,8 @@
 package com.mdd.ela.service.base;
 
 
-
 import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -11,8 +11,7 @@ import software.amazon.awssdk.services.s3.model.*;
 
 
 import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -26,8 +25,6 @@ public class BaseS3ServiceImpl implements BaseS3Service {
     private String bucketName;
     @Value("${s3.region}")
     private String region;
-
-
     private final S3Client s3;
 
     public BaseS3ServiceImpl(S3Client s3) {
@@ -37,7 +34,7 @@ public class BaseS3ServiceImpl implements BaseS3Service {
     @Override
     public String saveFile(MultipartFile file, String type) {
         String originalFilename = file.getOriginalFilename();
-        String key = "public/" + type +"/"+ UUID.randomUUID() + "_" + originalFilename;
+        String key = "public/" + type + "/" + UUID.randomUUID() + "_" + originalFilename;
         int count = 0;
         int maxTries = 3;
         while (true) {
@@ -47,7 +44,7 @@ public class BaseS3ServiceImpl implements BaseS3Service {
                                 .bucket(bucketName)
                                 .key(key)
                                 .acl(ObjectCannedACL.PUBLIC_READ)  // Đặt quyền công khai
-                                .contentType("image/jpeg")
+//                                .contentType("image/jpeg")
                                 .build(),
                         RequestBody.fromBytes(file.getBytes()));
 
@@ -97,5 +94,42 @@ public class BaseS3ServiceImpl implements BaseS3Service {
                 .stream()
                 .map(S3Object::key) // Đúng lớp `S3Object` từ SDK v2
                 .collect(Collectors.toList());
+    }
+    @Override
+    public String uploadChunkToS3(String fileName, String uploadId, int chunkIndex, byte[] data, int totalChunk, List<CompletedPart> completedPartList) throws IOException {
+        String key = "public/" + "/" + UUID.randomUUID() + "_" + fileName;
+        UploadPartRequest request = UploadPartRequest.builder()
+                .bucket(bucketName)
+                .key(fileName)
+                .uploadId(uploadId)
+                .partNumber(chunkIndex + 1) // partNumber bắt đầu từ 1
+                .contentLength((long) data.length)
+                .build();
+
+        // Upload chunk
+        String eTag = s3.uploadPart(request, RequestBody.fromBytes(data)).eTag();
+
+
+        CompletedPart completedPart = CompletedPart.builder()
+                .partNumber(chunkIndex + 1)
+                .eTag(eTag).build();
+        completedPartList.add(completedPart);
+
+        if (completedPartList.size() == totalChunk){
+            completedPartList.sort(Comparator.comparingInt(CompletedPart::partNumber));
+
+            // Tạo yêu cầu hoàn tất Multipart Upload
+            CompleteMultipartUploadRequest completeRequest = CompleteMultipartUploadRequest.builder()
+                    .bucket(bucketName)
+                    .key(key)
+                    .uploadId(uploadId)
+                    .multipartUpload(CompletedMultipartUpload.builder()
+                            .parts(completedPartList)
+                            .build())
+                    .build();
+            s3.completeMultipartUpload(completeRequest);
+        }
+        return "https://" + bucketName + ".s3." + region + ".amazonaws.com/" + key;
+
     }
 }

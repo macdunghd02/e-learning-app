@@ -34,7 +34,7 @@ public class ChapterController {
     @Operation(summary = "Create chapter")
     @PostMapping()
     public ResponseEntity<APIResponse> create(@RequestBody ChapterRequest request){
-        return new ResponseEntity<APIResponse>(service.create(request), HttpStatus.OK);
+        return new ResponseEntity<>(service.create(request), HttpStatus.OK);
     }
 
     @Operation(summary = "Update course")
@@ -42,13 +42,13 @@ public class ChapterController {
     public ResponseEntity<APIResponse> update(@PathVariable long id,
                                               @RequestBody ChapterUpdateRequest request){
         request.setId(id);
-        return new ResponseEntity<APIResponse>(service.update(request), HttpStatus.OK);
+        return new ResponseEntity<>(service.update(request), HttpStatus.OK);
     }
 
     @Operation(summary = "Delete course")
     @DeleteMapping("/{id}")
     public ResponseEntity<APIResponse> delete(@PathVariable long id) {
-        return new ResponseEntity<APIResponse>(service.delete(id), HttpStatus.OK);
+        return new ResponseEntity<>(service.delete(id), HttpStatus.OK);
     }
 
     @Operation(summary = "Get all course")
