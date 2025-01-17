@@ -10,7 +10,7 @@ import lombok.Data;
  * @project e-learning-app
  */
 @Data
-@JsonIgnoreProperties({"id","createUserId", "createTime", "modifyUserId", "modifyTime", "active", "authorAccountId", "courseNote"})
+@JsonIgnoreProperties({"id","createUserId", "createTime", "modifyUserId", "modifyTime", "active", "authorAccountId", "courseNote", "avatarId"})
 public class CourseRequest extends Course {
     CourseNoteRequest courseNoteRequest;
 }

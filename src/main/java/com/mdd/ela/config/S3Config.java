@@ -26,12 +26,12 @@ public class S3Config {
     @Bean
     public S3Client s3Client() {
         return S3Client.builder()
-                .region(Region.of(region)) // Đặt vùng
+                .region(Region.of(region))
                 .credentialsProvider(StaticCredentialsProvider.create(
-                        AwsBasicCredentials.create(accessKey, secret) // Cung cấp thông tin đăng nhập
+                        AwsBasicCredentials.create(accessKey, secret)
                 ))
                 .serviceConfiguration(S3Configuration.builder()
-                        .checksumValidationEnabled(true) // Kích hoạt xác thực checksum (tuỳ chọn)
+                        .checksumValidationEnabled(true)
                         .build()
                 )
                 .build();

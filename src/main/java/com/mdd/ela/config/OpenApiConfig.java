@@ -19,13 +19,6 @@ import java.util.List;
  */
 @Configuration
 public class OpenApiConfig {
-//    @Bean
-//    public GroupedOpenApi publicApi(@Value("${openapi.service.api-docs}") String apiDocs) {
-//        return GroupedOpenApi.builder()
-//                .group(apiDocs)
-//                .packagesToScan("com.mdd.ela.controller")
-//                .build();
-//    }
     @Bean
     public OpenAPI openAPI(@Value("${openapi.service.title}")String title,
                            @Value("${openapi.service.version}")String version,

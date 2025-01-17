@@ -16,6 +16,5 @@ import lombok.experimental.FieldDefaults;
 public class Chapter {
     long id;
     long courseId;
-    int orderNum;
     String title;
 }

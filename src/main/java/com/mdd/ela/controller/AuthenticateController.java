@@ -33,12 +33,14 @@ import java.text.ParseException;
 @Tag(name = "Authentication")
 public class AuthenticateController {
     AuthenticateService service;
+
     @Operation(summary = "Login")
     @PostMapping("login")
     ResponseEntity<APIResponse> login(@RequestBody AuthenticationRequest req) throws JOSEException {
         APIResponse response = service.authenticate(req);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
     @Operation(summary = "Refresh token")
     @PostMapping("refresh-token")
     ResponseEntity<APIResponse> refreshToken(@RequestBody RefreshTokenRequest request) throws JOSEException, ParseException {

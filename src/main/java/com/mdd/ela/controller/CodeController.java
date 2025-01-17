@@ -26,10 +26,9 @@ public class CodeController {
         this.service = service;
     }
 
-    @Operation(summary = "Get code by pCode")
-    @GetMapping(value = "/list")
-    public ResponseEntity<APIResponse> list(
-            @RequestParam(value = "pCode") String pCode) {
+    @Operation(summary = "Get by pCode")
+    @GetMapping(value = "/getByPCode")
+    public ResponseEntity<APIResponse> getByPCode(@RequestParam String pCode) {
         Map<String, Object> reqMap = new HashMap<>();
         reqMap.put("pCode", pCode);
         return new ResponseEntity<>(service.getByPCode(reqMap), HttpStatus.OK);

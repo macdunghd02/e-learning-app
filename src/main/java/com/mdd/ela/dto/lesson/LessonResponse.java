@@ -9,9 +9,6 @@ import lombok.experimental.FieldDefaults;
  * @created 1/7/2025 5:54 下午
  * @project e-learning-app
  */
-
-
 @FieldDefaults(level = AccessLevel.PRIVATE)
-
 public class LessonResponse extends Lesson {
 }

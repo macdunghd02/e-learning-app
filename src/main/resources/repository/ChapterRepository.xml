@@ -1,0 +1,54 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdd.ela.repository.ChapterRepository">
+    <resultMap id="chapterResponse" type="com.mdd.ela.dto.chapter.ChapterResponse">
+        <result column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="course_id" property="courseId"/>
+        <result column="num_of_lesson" property="numOfLessonInChapter"/>
+        <result column="total_time" property="totalTimeInChapter"/>
+    </resultMap>
+
+
+    <select id="getAll" resultMap = "chapterResponse">
+        select ct.*,l.id as lesson_id
+        from chapter ct
+        left join lesson l on ct.id = l.id
+        left join lesson_video v on l.id = v.lesson_id
+        where true
+        and course_id = #{courseId}
+    </select>
+
+    <select id="getDetail" resultMap = "chapterResponse">
+        select ct.*,l.id as lesson_id
+        from chapter ct
+        left join lesson l on ct.id = l.id
+        left join lesson_video v on l.id = v.lesson_id
+        where true
+        and ct.id = #{ct.id}
+    </select>
+
+
+    <insert id="create" useGeneratedKeys="true" keyProperty="id">
+        insert into chapter(
+        title
+        , course_id)
+        values (
+        #{title},
+        #{courseId})
+    </insert>
+
+
+    <update id="update">
+        update chapter
+        set
+        title = #{title}
+        where id = #{id}
+    </update>
+
+
+    <delete id="delete">
+        delete from chapter
+        where id = #{id}
+    </delete>
+
+</mapper>

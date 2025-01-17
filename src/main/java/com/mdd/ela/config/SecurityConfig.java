@@ -1,6 +1,7 @@
 package com.mdd.ela.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -20,6 +21,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.crypto.spec.SecretKeySpec;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,20 +33,12 @@ import java.util.List;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-    private final String[] WHITE_LIST = {
-            "ela/v1/test/**",
-            "ela/v1/account/sign-up",
-            "ela/v1/account/send-otp",
-            "ela/v1/auth/**",
-            "/ela/swagger-ui.html",
-            "/ela/swagger-ui/**",
-            "/ela/v1/api-docs/**",
-            "/ela/swagger-resources/**",
-            "/ela/webjars/**"
-    };
+    @Value("${security.white-list}")
+    private List<String> whiteList;
 
-    @Value("${jwt.signer-key}")
+    @Value("${security.jwt.signer-key}")
     private String signerKey;
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -52,7 +46,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request ->
                         request
-                                .requestMatchers(WHITE_LIST).permitAll()
+                                .requestMatchers(whiteList.toArray(new String[0])).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt ->
@@ -63,7 +57,6 @@ public class SecurityConfig {
             CorsConfigurationSource corsConfigurationSource = corsConfigurationSource();
             httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource);
         });
-
         return httpSecurity.build();
     }
 
@@ -92,11 +85,10 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:3001")); // Thêm các origin bạn muốn cho phép
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("*"));
+        configuration.addAllowedOriginPattern("*");
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
-
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

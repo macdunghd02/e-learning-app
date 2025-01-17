@@ -4,8 +4,6 @@ import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
-import lombok.experimental.NonFinal;
-import org.cloudinary.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +18,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 public class JwtUtil {
-    @Value("${jwt.signer-key}")
+    @Value("${security.jwt.signer-key}")
     private String SIGNER_KEY;
     private static final String ISSUER = "mdd";
 

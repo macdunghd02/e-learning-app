@@ -1,16 +1,22 @@
-redis:
-  host: 127.0.0.1
-  port: 6379
-
 spring:
+  application:
+    name: e-learning-app
+
   profiles:
     active: dev
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
 
   datasource:
     url: ${DATASOURCE_URL}
     username: ${DATASOURCE_USERNAME}
     password: ${DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
 
   mail:
     host: smtp.gmail.com
@@ -29,21 +35,8 @@ spring:
     baseline-on-migrate: true
     baseline-version: 1
 
-s3:
-  access-key: ${S3_ACCESS_KEY}
-  secret: ${S3_SECRET}
-  region: ${S3_REGION}
-  bucket-name: ${S3_BUCKET_NAME}
-
 mybatis:
   mapper-locations: classpath:repository/*.xml
-  type-aliases-package: com.mdd.ela.dto
-
-api:
-  prefix: /ela/v1
-
-jwt:
-  signer-key: ${JWT_SIGNER_KEY}
 
 openapi:
   service:
@@ -52,8 +45,36 @@ openapi:
     version: v1
     server: http://127.0.0.1:8080
 
+api:
+  prefix: /ela/v1
+
 springdoc:
   api-docs:
     path: /ela/v1/api-docs
   swagger-ui:
     path: /ela/swagger-ui.html
+
+s3:
+  access-key: ${S3_ACCESS_KEY}
+  secret: ${S3_SECRET}
+  region: ${S3_REGION}
+  bucket-name: ${S3_BUCKET_NAME}
+
+
+redis:
+  host: 127.0.0.1
+  port: 6379
+
+security:
+  jwt:
+    signer-key: ${JWT_SIGNER_KEY}
+  white-list:
+    ela/v1/test/**
+    , ela/v1/account/sign-up
+    , ela/v1/account/send-otp
+    , ela/v1/auth/**
+    , /ela/swagger-ui.html
+    , /ela/swagger-ui/**
+    , /ela/v1/api-docs/**
+    , /ela/swagger-resources/**
+    , /ela/webjars/**

@@ -1,12 +1,11 @@
-package com.mdd.ela.model.entity;
+package com.mdd.ela.dto.lesson;
 
-import com.mdd.ela.model.base.BaseDto;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 /**
  * @author dungmd
- * @created 1/4/2025 5:46 下午
+ * @created 1/16/2025 4:05 下午
  * @project e-learning-app
  */
 @Data
@@ -14,10 +13,8 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Lesson extends BaseDto {
+public class BasicLessonResponse {
     long id;
-    long chapterId;
     String title;
-    String description;
-    int active;
+    Double duration;
 }
