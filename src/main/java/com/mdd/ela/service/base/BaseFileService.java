@@ -9,6 +9,6 @@ import java.io.IOException;
  */
 
 public interface BaseFileService {
-    public String saveTempChunk(String fileName, String uploadId,int chunkIndex,byte[] data) throws IOException;
+    String saveTempChunk(String fileName, String uploadId,int chunkIndex,byte[] data) throws IOException;
 
 }

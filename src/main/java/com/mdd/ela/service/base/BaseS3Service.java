@@ -17,5 +17,5 @@ public interface BaseS3Service {
     byte[] downloadFile(String filename);
     String deleteFile(String filename);
     List<String> listAllFiles();
-    String uploadChunkToS3(String fileName, String uploadId, int chunkIndex, byte[] data, int totalChunk, List<CompletedPart> completedPartList) throws IOException;
+    String uploadChunkToS3(String fileName, String uploadId, String tempDir, int totalChunk, List<CompletedPart> completedPartList) throws IOException;
 }
