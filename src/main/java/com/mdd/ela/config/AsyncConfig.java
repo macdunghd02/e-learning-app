@@ -2,6 +2,7 @@ package com.mdd.ela.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.Executor;
@@ -11,7 +12,7 @@ import java.util.concurrent.Executor;
  * @created 1/17/2025 3:49 下午
  * @project e-learning-app
  */
-
+@EnableAsync
 @Configuration
 public class AsyncConfig {
 
