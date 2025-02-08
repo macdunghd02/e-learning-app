@@ -39,9 +39,11 @@ public class CourseController {
     @PutMapping(value = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<APIResponse> update(@PathVariable long id,
                                               @RequestPart CourseRequest courseRequest,
-                                              @RequestPart MultipartFile file){
-        String avatarUrl = baseS3Service.saveFile(file,"image");
-        courseRequest.setAvatarUrl(avatarUrl);
+                                              @RequestPart(required = false) MultipartFile file){
+        if(file!=null) {
+            String avatarUrl = baseS3Service.saveFile(file, "image");
+            courseRequest.setAvatarUrl(avatarUrl);
+        }
         courseRequest.setId(id);
         return new ResponseEntity<>(service.update(courseRequest), HttpStatus.OK);
     }
