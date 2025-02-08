@@ -57,6 +57,7 @@ public class CourseServiceImpl implements CourseService {
         resultResponse.put("metaData",Map.of(
                 "pageSize", reqMap.get("pageSize"),
                 "pageNum", reqMap.get("pageNum"),
+                "totalPage", (int)Math.ceil((double) count/(int)reqMap.get("pageSize")),
                 "totalRecords", count
         ));
         return APIResponse.success(resultResponse);
