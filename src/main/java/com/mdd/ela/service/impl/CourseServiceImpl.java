@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -51,12 +52,14 @@ public class CourseServiceImpl implements CourseService {
         for(CourseResponse courseResponse : courseResponseList){
             courseResponse.setCourseNoteResponseList(courseNoteRepository.getAllByCourseId(courseResponse.getId()));
         }
-        return APIResponse.success(courseResponseList,Map.of(
-                "timestamp", LocalDateTime.now(),
+        Map<String,Object> resultResponse = new HashMap<>();
+        resultResponse.put("data",courseResponseList);
+        resultResponse.put("metaData",Map.of(
                 "pageSize", reqMap.get("pageSize"),
                 "pageNum", reqMap.get("pageNum"),
                 "totalRecords", count
-                ));
+        ));
+        return APIResponse.success(resultResponse);
     }
 
     @Override
