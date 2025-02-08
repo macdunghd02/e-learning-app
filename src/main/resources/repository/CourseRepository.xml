@@ -122,7 +122,9 @@
         set
         title = #{title}
         ,   description = #{description}
-        ,   avatar_url = #{avatarUrl}
+        <if test="avatarUrl != null">
+            , avatar_url = #{avatarUrl}
+        </if>
         ,   root_price = #{rootPrice}
         ,   active = #{active}
         ,   type = #{type}
