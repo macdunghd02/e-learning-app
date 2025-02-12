@@ -73,9 +73,9 @@
         left join <include refid="categoryTable"></include> ct on c.category_id = ct.id
         where true
         <include refid="filter"></include>
+        order by c.id desc
         limit #{limit}
         offset #{offset}
-        order by c.id desc
     </select>
 
     <select id="getCount" resultType="int">
