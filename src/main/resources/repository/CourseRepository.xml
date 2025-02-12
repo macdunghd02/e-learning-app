@@ -75,7 +75,7 @@
         <include refid="filter"></include>
         limit #{limit}
         offset #{offset}
-
+        order by c.id desc
     </select>
 
     <select id="getCount" resultType="int">
@@ -153,5 +153,6 @@
         left join account a on c.author_account_id = a.id
         where true
         and a.id = #{id}
+        order by c.id desc
     </select>
 </mapper>

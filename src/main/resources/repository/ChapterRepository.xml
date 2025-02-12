@@ -4,14 +4,16 @@
         <result column="id" property="id"/>
         <result column="title" property="title"/>
         <result column="course_id" property="courseId"/>
+        <result column="course_title" property="courseTitle"/>
         <result column="num_of_lesson" property="numOfLessonInChapter"/>
         <result column="total_time" property="totalTimeInChapter"/>
     </resultMap>
 
 
     <select id="getAll" resultMap = "chapterResponse">
-        select ct.*,l.id as lesson_id
+        select ct.*,l.id as lesson_id, c.title as course_title
         from chapter ct
+        left join course c on ct.course_id = c.id
         left join lesson l on ct.id = l.id
         left join lesson_video v on l.id = v.lesson_id
         where true
@@ -51,4 +53,30 @@
         where id = #{id}
     </delete>
 
+
+    <select id="getAllComboBox" resultMap = "chapterResponse">
+        select ct.*,l.id as lesson_id, c.title as course_title
+        from chapter ct
+        left join course c on ct.course_id = c.id
+        left join lesson l on ct.id = l.id
+        left join lesson_video v on l.id = v.lesson_id
+        where true
+        and c.author_account_id  = #{accountId}
+        <if test="chapterTitle != null and chapterTitlechapterTitle != ''">
+            and (upper(ct.title) like upper(concat('%',#{chapterTitle},'%')))
+        </if>
+        limit #{limit}
+        offset #{offset}
+    </select>
+
+    <select id="getCount" resultType="int">
+        select count(*)
+        from chapter ct
+        left join course c on ct.course_id = c.id
+        where true
+        <if test="chapterTitle != null and chapterTitlechapterTitle != ''">
+            and (upper(ct.title) like upper(concat('%',#{chapterTitle},'%')))
+        </if>
+        and c.author_account_id  = #{accountId}
+    </select>
 </mapper>

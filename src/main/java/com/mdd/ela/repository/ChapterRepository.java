@@ -6,6 +6,7 @@ import com.mdd.ela.dto.chapter.ChapterUpdateRequest;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author dungmd
@@ -19,4 +20,6 @@ public interface ChapterRepository {
     int create(ChapterRequest request);
     int update(ChapterUpdateRequest request);
     int delete(long id);
+    List<ChapterResponse> getAllComboBox(Map<String,Object> reqMap);
+    int getCount(Map<String,Object> reqMap);
 }

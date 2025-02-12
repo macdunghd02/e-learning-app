@@ -37,7 +37,7 @@ public class ChapterController {
         return new ResponseEntity<>(service.create(request), HttpStatus.OK);
     }
 
-    @Operation(summary = "Update course")
+    @Operation(summary = "Update chapter")
     @PutMapping(value = "/{id}")
     public ResponseEntity<APIResponse> update(@PathVariable long id,
                                               @RequestBody ChapterUpdateRequest request){
@@ -45,16 +45,28 @@ public class ChapterController {
         return new ResponseEntity<>(service.update(request), HttpStatus.OK);
     }
 
-    @Operation(summary = "Delete course")
+    @Operation(summary = "Delete chapter")
     @DeleteMapping("/{id}")
     public ResponseEntity<APIResponse> delete(@PathVariable long id) {
         return new ResponseEntity<>(service.delete(id), HttpStatus.OK);
     }
 
-    @Operation(summary = "Get all course")
+    @Operation(summary = "Get all chapter")
     @GetMapping
-    public ResponseEntity<APIResponse> getAllCourses(long courseId) {
+    public ResponseEntity<APIResponse> getAllChapter(long courseId) {
         return new ResponseEntity<>(service.getAll(courseId), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get all chapter for Combo box")
+    @GetMapping("/comboBox")
+    public ResponseEntity<APIResponse> getAllChapterComboBox(@RequestParam(defaultValue = "10") Integer pageSize,
+                                                     @RequestParam(defaultValue = "1") Integer pageNum,
+                                                     @RequestParam(required = false) String chapterTitle) {
+        Map<String,Object> reqMap = new HashMap<>();
+        reqMap.put("pageNum",pageNum);
+        reqMap.put("pageSize",pageSize);
+        reqMap.put("chapterTitle",chapterTitle);
+        return new ResponseEntity<>(service.getAllComboBox(reqMap), HttpStatus.OK);
     }
 }
 
