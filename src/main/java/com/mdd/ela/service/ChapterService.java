@@ -18,4 +18,5 @@ public interface ChapterService {
     APIResponse create(ChapterRequest request);
     APIResponse update(ChapterUpdateRequest request);
     APIResponse delete(long id);
+    APIResponse getAllComboBox(Map<String,Object> reqMap);
 }

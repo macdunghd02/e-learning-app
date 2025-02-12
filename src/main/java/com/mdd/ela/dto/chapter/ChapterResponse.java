@@ -21,6 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ChapterResponse extends Chapter {
+    String courseTitle;
     long numOfLessonInChapter;
     String totalTimeInChapter;
     List<BasicLessonResponse> lessonResponseList;
