@@ -1,5 +1,6 @@
 package com.mdd.ela.service.impl;
 
+import com.mdd.ela.dto.base.ComboBoxResponse;
 import com.mdd.ela.dto.course.CourseRequest;
 import com.mdd.ela.dto.course.CourseResponse;
 import com.mdd.ela.model.base.APIResponse;
@@ -97,6 +98,12 @@ public class CourseServiceImpl implements CourseService {
         repository.delete(id);
         courseNoteRepository.deleteByCourseId(id);
         return APIResponse.success(null);
+    }
+
+    @Override
+    public APIResponse getAllCoursesComboBox() {
+        List<ComboBoxResponse> response = repository.getAllForComboBox(LoggedInUserUtil.getIdOfLoggedInUser());
+        return APIResponse.success(response);
     }
 
 

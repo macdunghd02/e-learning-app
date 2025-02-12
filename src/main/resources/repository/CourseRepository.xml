@@ -41,6 +41,12 @@
         <result column="modify_user_id" property="modifyUserId"/>
     </resultMap>
 
+
+    <resultMap id="comboBoxResponse" type="com.mdd.ela.dto.base.ComboBoxResponse">
+        <result column="id" property="id"/>
+        <result column="title" property="title"/>
+    </resultMap>
+
     <sql id="filter">
         <if test="searchingValue != null and searchingValue != ''">
             and (upper(c.title) like upper(concat('%',#{searchingValue},'%')))
@@ -140,4 +146,12 @@
         where id = #{id}
     </delete>
 
+
+    <select id="getAllForComboBox" resultMap = "comboBoxResponse">
+        select c.id, c.title
+        from course c
+        left join account a on c.author_account_id = a.id
+        where true
+        and a.id = #{id}
+    </select>
 </mapper>

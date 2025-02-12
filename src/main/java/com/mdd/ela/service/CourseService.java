@@ -17,4 +17,5 @@ public interface CourseService {
     APIResponse create(CourseRequest request);
     APIResponse update(CourseRequest request);
     APIResponse delete(long id);
+    APIResponse getAllCoursesComboBox();
 }

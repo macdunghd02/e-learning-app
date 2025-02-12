@@ -79,4 +79,10 @@ public class CourseController {
         reqMap.put("priceTo", priceTo);
         return new ResponseEntity<>(service.getAll(reqMap), HttpStatus.OK);
     }
+
+    @Operation(summary = "Get all course for Combo box")
+    @GetMapping("/comboBox")
+    public ResponseEntity<APIResponse> getAllCoursesComboBox() {
+        return new ResponseEntity<>(service.getAllCoursesComboBox(), HttpStatus.OK);
+    }
 }
