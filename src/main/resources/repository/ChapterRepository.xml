@@ -21,8 +21,9 @@
     </select>
 
     <select id="getDetail" resultMap = "chapterResponse">
-        select ct.*,l.id as lesson_id
+        select ct.*,l.id as lesson_id, c.title as course_title
         from chapter ct
+        left join course c on ct.course_id = c.id
         left join lesson l on ct.id = l.id
         left join lesson_video v on l.id = v.lesson_id
         where true
@@ -44,6 +45,7 @@
         update chapter
         set
         title = #{title}
+        ,course_id = #{courseId}
         where id = #{id}
     </update>
 

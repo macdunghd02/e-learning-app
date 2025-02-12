@@ -8,6 +8,6 @@ import com.mdd.ela.model.entity.Chapter;
  * @created 1/16/2025 4:33 下午
  * @project e-learning-app
  */
-@JsonIgnoreProperties({"id","courseId"})
+@JsonIgnoreProperties({"id"})
 public class ChapterUpdateRequest extends Chapter {
 }
