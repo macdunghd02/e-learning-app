@@ -1,5 +1,6 @@
 package com.mdd.ela.repository;
 
+import com.mdd.ela.dto.base.ComboBoxResponse;
 import com.mdd.ela.dto.course.CourseRequest;
 import com.mdd.ela.dto.course.CourseResponse;
 import org.apache.ibatis.annotations.Mapper;
@@ -20,4 +21,5 @@ public interface CourseRepository {
     int create(CourseRequest request);
     int update(CourseRequest request);
     int delete(long id);
+    List<ComboBoxResponse> getAllForComboBox(long id);
 }
