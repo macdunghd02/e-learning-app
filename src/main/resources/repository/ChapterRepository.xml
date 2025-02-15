@@ -64,8 +64,11 @@
         left join lesson_video v on l.id = v.lesson_id
         where true
         and c.author_account_id  = #{accountId}
-        <if test="chapterTitle != null and chapterTitlechapterTitle != ''">
+        <if test="chapterTitle != null and chapterTitle != ''">
             and (upper(ct.title) like upper(concat('%',#{chapterTitle},'%')))
+        </if>
+        <if test="courseId != null and courseId != 0">
+            and c.id = #{courseId}
         </if>
         limit #{limit}
         offset #{offset}
@@ -76,8 +79,11 @@
         from chapter ct
         left join course c on ct.course_id = c.id
         where true
-        <if test="chapterTitle != null and chapterTitlechapterTitle != ''">
+        <if test="chapterTitle != null and chapterTitle != ''">
             and (upper(ct.title) like upper(concat('%',#{chapterTitle},'%')))
+        </if>
+        <if test="courseId != null and courseId != 0">
+            and c.id = #{courseId}
         </if>
         and c.author_account_id  = #{accountId}
     </select>
