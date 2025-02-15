@@ -33,14 +33,14 @@ public class ChapterController {
 
     @Operation(summary = "Create chapter")
     @PostMapping()
-    public ResponseEntity<APIResponse> create(@RequestBody ChapterRequest request){
+    public ResponseEntity<APIResponse> create(@RequestBody ChapterRequest request) {
         return new ResponseEntity<>(service.create(request), HttpStatus.OK);
     }
 
     @Operation(summary = "Update chapter")
     @PutMapping(value = "/{id}")
     public ResponseEntity<APIResponse> update(@PathVariable long id,
-                                              @RequestBody ChapterUpdateRequest request){
+                                              @RequestBody ChapterUpdateRequest request) {
         request.setId(id);
         return new ResponseEntity<>(service.update(request), HttpStatus.OK);
     }
@@ -60,12 +60,14 @@ public class ChapterController {
     @Operation(summary = "Get all chapter")
     @GetMapping()
     public ResponseEntity<APIResponse> getAllChapterComboBox(@RequestParam(defaultValue = "10") Integer pageSize,
-                                                     @RequestParam(defaultValue = "1") Integer pageNum,
-                                                     @RequestParam(required = false) String chapterTitle) {
-        Map<String,Object> reqMap = new HashMap<>();
-        reqMap.put("pageNum",pageNum);
-        reqMap.put("pageSize",pageSize);
-        reqMap.put("chapterTitle",chapterTitle);
+                                                             @RequestParam(defaultValue = "1") Integer pageNum,
+                                                             @RequestParam(required = false) String chapterTitle,
+                                                             @RequestParam(required = false) Long courseId) {
+        Map<String, Object> reqMap = new HashMap<>();
+        reqMap.put("pageNum", pageNum);
+        reqMap.put("pageSize", pageSize);
+        reqMap.put("chapterTitle", chapterTitle);
+        reqMap.put("courseId", courseId);
         return new ResponseEntity<>(service.getAllComboBox(reqMap), HttpStatus.OK);
     }
 }
