@@ -83,6 +83,6 @@ public class AccountServiceImpl implements AccountService {
 
     private String generateOTP() {
         int otp = (int) (Math.random() * 1000000);
-        return String.format("%06d", otp);  // Tạo OTP 6 chữ số
+        return String.format("%04d", otp);  // Tạo OTP 6 chữ số
     }
 }
