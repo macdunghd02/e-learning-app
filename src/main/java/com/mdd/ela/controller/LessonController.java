@@ -11,6 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author dungmd
  * @created 1/5/2025 4:41 下午
@@ -51,30 +54,25 @@ public class LessonController {
         return new ResponseEntity<>(service.getDetail(id), HttpStatus.OK);
     }
 
-//    @Operation(summary = "Get by course id")
-//    @GetMapping("/getByCourseId")
-//    public ResponseEntity<APIResponse> getAllChapter(long courseId) {
-//        return new ResponseEntity<>(service.getAll(courseId), HttpStatus.OK);
-//    }
 
-//    @Operation(summary = "Get by chapter id")
-//    @GetMapping("/getByChapterId")
-//    public ResponseEntity<APIResponse> getByChapterId(long chapterId) {
-//        return new ResponseEntity<>(service.getAll(chapterId), HttpStatus.OK);
-//    }
-//
-//
-//    @Operation(summary = "Get all chapter")
-//    @GetMapping()
-//    public ResponseEntity<APIResponse> getAllChapterComboBox(@RequestParam(defaultValue = "10") Integer pageSize,
-//                                                             @RequestParam(defaultValue = "1") Integer pageNum,
-//                                                             @RequestParam(required = false) String chapterTitle,
-//                                                             @RequestParam(required = false) Long courseId) {
-//        Map<String, Object> reqMap = new HashMap<>();
-//        reqMap.put("pageNum", pageNum);
-//        reqMap.put("pageSize", pageSize);
-//        reqMap.put("chapterTitle", chapterTitle);
-//        reqMap.put("courseId", courseId);
-//        return new ResponseEntity<>(service.getAllComboBox(reqMap), HttpStatus.OK);
-//    }
+    @Operation(summary = "Get by chapter id")
+    @GetMapping("/getByChapterId")
+    public ResponseEntity<APIResponse> getByChapterId(long chapterId) {
+        return new ResponseEntity<>(service.getAll(chapterId), HttpStatus.OK);
+    }
+
+
+    @Operation(summary = "Get all lesson")
+    @GetMapping()
+    public ResponseEntity<APIResponse> getAllLessonComboBox(@RequestParam(defaultValue = "10") Integer pageSize,
+                                                             @RequestParam(defaultValue = "1") Integer pageNum,
+                                                             @RequestParam(required = false) String lessonTitle,
+                                                             @RequestParam(required = false) Long chapterId) {
+        Map<String, Object> reqMap = new HashMap<>();
+        reqMap.put("pageNum", pageNum);
+        reqMap.put("pageSize", pageSize);
+        reqMap.put("lessonTitle", lessonTitle);
+        reqMap.put("chapterId", chapterId);
+        return new ResponseEntity<>(service.getAllComboBox(reqMap), HttpStatus.OK);
+    }
 }

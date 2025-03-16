@@ -1,5 +1,6 @@
 package com.mdd.ela.service.impl;
 
+import com.mdd.ela.dto.chapter.ChapterResponse;
 import com.mdd.ela.dto.lesson.LessonResponse;
 import com.mdd.ela.dto.lessonvideo.LessonVideoResponse;
 import com.mdd.ela.model.base.APIResponse;
@@ -9,10 +10,19 @@ import com.mdd.ela.repository.LessonRepository;
 import com.mdd.ela.repository.LessonVideoRepository;
 import com.mdd.ela.service.LessonService;
 import com.mdd.ela.util.LoggedInUserUtil;
+import com.mdd.ela.util.PagingUtil;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author dungmd
@@ -68,5 +78,38 @@ public class LessonServiceImpl implements LessonService {
     public APIResponse delete(long id) {
         lessonVideoRepository.deleteByLessonId(id);
         return APIResponse.success(repository.delete(id));
+    }
+
+
+
+    @Override
+    public APIResponse getAllComboBox(Map<String, Object> reqMap) {
+        int limit = PagingUtil.getLimit((Integer) reqMap.get("pageSize"));
+        int offset = PagingUtil.getOffset((Integer) reqMap.get("pageSize"), (Integer) reqMap.get("pageNum"));
+        reqMap.put("limit", limit);
+        reqMap.put("offset", offset);
+        reqMap.put("accountId",LoggedInUserUtil.getIdOfLoggedInUser());
+
+        List<LessonResponse> lessonResponseList = repository.getAllComboBox(reqMap);
+        Map<String,Object> resultResponse = new HashMap<>();
+        int count = repository.getCount(reqMap);
+        resultResponse.put("data",lessonResponseList);
+        resultResponse.put("metaData",Map.of(
+                "pageSize", reqMap.get("pageSize"),
+                "pageNum", reqMap.get("pageNum"),
+                "totalPage", (int)Math.ceil((double) count/(int)reqMap.get("pageSize")),
+                "totalRecords", count
+        ));
+        return APIResponse.success(resultResponse);
+    }
+
+    @Override
+    public APIResponse getAll(long chapterId) {
+        List<LessonResponse> responseList = repository.getAll(chapterId);
+        for(var item : responseList){
+            LessonVideoResponse lvr = lessonVideoRepository.getDetailByLessonId(item.getId());
+            item.setLessonVideoResponse(lvr);
+        }
+        return APIResponse.success(responseList);
     }
 }
