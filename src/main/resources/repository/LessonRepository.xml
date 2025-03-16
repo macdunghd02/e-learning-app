@@ -57,4 +57,43 @@
         where id = #{id}
     </delete>
 
+
+
+    <select id="getAllComboBox" resultMap="lesson">
+        select l.*
+        from lesson l
+        left join chapter ct on l.chapter_id = ct.id
+        left join course c on ct.course_id = c.id
+        where true
+        and c.author_account_id  = #{accountId}
+        <if test="lessonTitle != null and lessonTitle != ''">
+            and (upper(l.title) like upper(concat('%',#{lessonTitle},'%')))
+        </if>
+        <if test="chapterId != null and chapterId != 0">
+            and ct.id = #{chapterId}
+        </if>
+        limit #{limit}
+        offset #{offset}
+    </select>
+
+    <select id="getCount" resultType="int">
+        select count(*)
+        from lesson l
+        left join chapter ct on l.chapter_id = ct.id
+        left join course c on ct.course_id = c.id
+        where true
+        and c.author_account_id  = #{accountId}
+        <if test="lessonTitle != null and lessonTitle != ''">
+            and (upper(l.title) like upper(concat('%',#{lessonTitle},'%')))
+        </if>
+        <if test="chapterId != null and chapterId != 0">
+            and ct.id = #{chapterId}
+        </if>
+    </select>
+
+    <select id="getAll" resultMap="lesson">
+        select * from lesson
+        where chapter_id = #{chapterId}
+    </select>
+
 </mapper>

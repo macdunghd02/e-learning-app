@@ -1,8 +1,12 @@
 package com.mdd.ela.repository;
 
+import com.mdd.ela.dto.chapter.ChapterResponse;
 import com.mdd.ela.dto.lesson.LessonRequest;
 import com.mdd.ela.dto.lesson.LessonResponse;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author dungmd
@@ -12,7 +16,16 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface LessonRepository {
     LessonResponse getDetail(long id);
+
     int insert(LessonRequest request);
+
     int update(LessonRequest request);
+
     int delete(long id);
+
+    List<LessonResponse> getAllComboBox(Map<String, Object> reqMap);
+
+    int getCount(Map<String, Object> reqMap);
+
+    List<LessonResponse> getAll(long chapterId);
 }
