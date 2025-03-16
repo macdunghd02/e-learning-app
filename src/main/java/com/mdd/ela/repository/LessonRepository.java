@@ -1,11 +1,8 @@
 package com.mdd.ela.repository;
 
 import com.mdd.ela.dto.lesson.LessonRequest;
-import com.mdd.ela.dto.lesson.LessonUpdateRequest;
-import com.mdd.ela.model.entity.Lesson;
+import com.mdd.ela.dto.lesson.LessonResponse;
 import org.apache.ibatis.annotations.Mapper;
-
-import java.util.List;
 
 /**
  * @author dungmd
@@ -14,8 +11,8 @@ import java.util.List;
  */
 @Mapper
 public interface LessonRepository {
-    Lesson getDetail(long id);
+    LessonResponse getDetail(long id);
     int insert(LessonRequest request);
-    int update(LessonUpdateRequest request);
+    int update(LessonRequest request);
     int delete(long id);
 }

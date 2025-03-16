@@ -18,4 +18,5 @@ public class LessonVideo {
     long lessonId;
     String url;
     long duration;
+    int capacity;
 }

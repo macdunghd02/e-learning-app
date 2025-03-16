@@ -5,6 +5,7 @@ import software.amazon.awssdk.services.s3.model.CompletedPart;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author dungmd
@@ -17,5 +18,11 @@ public interface BaseS3Service {
     byte[] downloadFile(String filename);
     String deleteFile(String filename);
     List<String> listAllFiles();
-    String uploadChunkToS3(String fileName, String uploadId, String tempDir, int totalChunk, List<CompletedPart> completedPartList) throws IOException;
+    Map<String,Object> createMultipartUploadRequest(String fileName, String uploadId);
+
+    List<CompletedPart> uploadChunk(String key, String uploadId, String tempDir, int totalChunk) throws IOException;
+
+    String completeMultipartUploadRequest(String key, String uploadId, List<CompletedPart> completedPartList) throws IOException;
+
+    void removeTempDir(String tempDir) throws IOException;
 }
