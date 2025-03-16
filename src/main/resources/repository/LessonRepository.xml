@@ -43,6 +43,7 @@
         update lesson
         set
         title = #{title}
+        ,   chapter_id = #{chapterId}
         ,   description = #{description}
         ,   active = #{active}
         ,   modify_time = now()

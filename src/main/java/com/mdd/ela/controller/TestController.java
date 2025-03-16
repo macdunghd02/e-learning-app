@@ -1,5 +1,6 @@
 package com.mdd.ela.controller;
 
+import com.mdd.ela.dto.base.UploadChunkRequest;
 import com.mdd.ela.model.base.APIResponse;
 import com.mdd.ela.service.base.BaseFileService;
 import com.mdd.ela.service.base.BaseRedisService;
@@ -20,6 +21,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executor;
 
 /**
@@ -53,42 +55,41 @@ public class TestController {
     }
 
     @PostMapping("/chunk")
-    public ResponseEntity<APIResponse> uploadChunk(
-            @RequestParam("data") String data,
-            @RequestParam("fileName") String fileName,
-            @RequestParam("uploadId") String uploadId,
-            @RequestParam("chunkIndex") int chunkIndex,
-            @RequestParam("totalChunk") int totalChunk
-    ) throws IOException {
+    public ResponseEntity<APIResponse> uploadChunk(@RequestBody UploadChunkRequest request) throws IOException {
         // Giải mã Base64 an toàn
         byte[] buffer;
-        if (data.contains(",")) {
-            buffer = Base64.getDecoder().decode(data.split(",")[1]);
+        if (request.getData().contains(",")) {
+            buffer = Base64.getDecoder().decode(request.getData().split(",")[1]);
         } else {
-            buffer = Base64.getDecoder().decode(data);
+            buffer = Base64.getDecoder().decode(request.getData());
         }
 
         // Lưu chunk vào thư mục tạm
-        baseFileService.saveTempChunk(fileName, uploadId, chunkIndex, buffer);
+        baseFileService.saveTempChunk(request.getFileName(), request.getUploadId(), request.getChunkIndex(), buffer);
 
         // Nếu chưa phải chunk cuối, trả về OK ngay
-        if (chunkIndex < totalChunk - 1) {
+        if (request.getChunkIndex() < request.getTotalChunk() - 1) {
             return new ResponseEntity<>(APIResponse.success(null), HttpStatus.OK);
         }
 
         // Đảm bảo chỉ một thread chạy ghép file
-        synchronized (uploadId.intern()) {
+        synchronized ( request.getUploadId().intern()) {
             taskExecutor.execute(() -> {
                 try {
-                    List<CompletedPart> completedPartList = new ArrayList<>();
-                    baseS3Service.uploadChunkToS3(fileName, uploadId, "temp/" + uploadId, totalChunk, completedPartList);
+                    Map<String,Object> createResponse = baseS3Service.createMultipartUploadRequest(request.getFileName(), request.getUploadId());
+                    String key = (String) createResponse.get("key");
+                    String uploadId = (String) createResponse.get("uploadId");
+
+                    List<CompletedPart> completedPartList = baseS3Service.uploadChunk(key,uploadId,"temp"+ key, request.getTotalChunk());
+                    if(completedPartList.size() == request.getTotalChunk())
+                        baseS3Service.completeMultipartUploadRequest(key,uploadId,completedPartList);
                 } catch (IOException e) {
-                    log.error("Upload to S3 failed for uploadId: " + uploadId, e);
+                    log.error("Upload to S3 failed for uploadId: " + request.getUploadId(), e);
                 }
             });
         }
 
-        return new ResponseEntity<>(APIResponse.success(chunkIndex), HttpStatus.OK);
+        return new ResponseEntity<>(APIResponse.success(request.getChunkIndex()), HttpStatus.OK);
     }
 }
 

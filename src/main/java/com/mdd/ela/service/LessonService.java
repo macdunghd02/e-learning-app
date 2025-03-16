@@ -1,10 +1,7 @@
 package com.mdd.ela.service;
 
 import com.mdd.ela.dto.lesson.LessonRequest;
-import com.mdd.ela.dto.lesson.LessonUpdateRequest;
 import com.mdd.ela.model.base.APIResponse;
-import com.mdd.ela.model.base.BaseResponse;
-import com.mdd.ela.model.base.DataResponse;
 
 /**
  * @author dungmd
@@ -15,6 +12,6 @@ import com.mdd.ela.model.base.DataResponse;
 public interface LessonService {
     APIResponse getDetail(long id);
     APIResponse create(LessonRequest request);
-    APIResponse update(LessonUpdateRequest request);
+    APIResponse update(LessonRequest request);
     APIResponse delete(long id);
 }
