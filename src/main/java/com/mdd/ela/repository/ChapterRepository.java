@@ -1,5 +1,6 @@
 package com.mdd.ela.repository;
 
+import com.mdd.ela.dto.base.ComboBoxResponse;
 import com.mdd.ela.dto.chapter.ChapterRequest;
 import com.mdd.ela.dto.chapter.ChapterResponse;
 import com.mdd.ela.dto.chapter.ChapterUpdateRequest;
@@ -22,4 +23,5 @@ public interface ChapterRepository {
     int delete(long id);
     List<ChapterResponse> getAllComboBox(Map<String,Object> reqMap);
     int getCount(Map<String,Object> reqMap);
+    List<ComboBoxResponse> getAllForComboBox(long courseId);
 }

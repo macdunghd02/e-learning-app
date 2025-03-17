@@ -1,5 +1,6 @@
 package com.mdd.ela.service.impl;
 
+import com.mdd.ela.dto.base.ComboBoxResponse;
 import com.mdd.ela.dto.chapter.ChapterRequest;
 import com.mdd.ela.dto.chapter.ChapterResponse;
 import com.mdd.ela.dto.chapter.ChapterUpdateRequest;
@@ -57,7 +58,7 @@ public class ChapterServiceImpl implements ChapterService {
     }
 
     @Override
-    public APIResponse getAllComboBox(Map<String, Object> reqMap) {
+    public APIResponse getAll(Map<String, Object> reqMap) {
         int limit = PagingUtil.getLimit((Integer) reqMap.get("pageSize"));
         int offset = PagingUtil.getOffset((Integer) reqMap.get("pageSize"), (Integer) reqMap.get("pageNum"));
         reqMap.put("limit", limit);
@@ -75,5 +76,11 @@ public class ChapterServiceImpl implements ChapterService {
                 "totalRecords", count
         ));
         return APIResponse.success(resultResponse);
+    }
+
+    @Override
+    public APIResponse getAllComboBox(long courseId) {
+        List<ComboBoxResponse> response = repository.getAllForComboBox(courseId);
+        return APIResponse.success(response);
     }
 }

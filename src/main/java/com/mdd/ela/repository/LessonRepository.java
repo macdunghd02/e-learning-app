@@ -23,7 +23,7 @@ public interface LessonRepository {
 
     int delete(long id);
 
-    List<LessonResponse> getAllComboBox(Map<String, Object> reqMap);
+    List<LessonResponse> getAllByReqMap(Map<String, Object> reqMap);
 
     int getCount(Map<String, Object> reqMap);
 

@@ -16,6 +16,6 @@ public interface LessonService {
     APIResponse create(LessonRequest request);
     APIResponse update(LessonRequest request);
     APIResponse delete(long id);
-    APIResponse getAllComboBox(Map<String,Object> reqMap);
+    APIResponse getAll(Map<String,Object> reqMap);
     APIResponse getAll(long chapterId);
 }

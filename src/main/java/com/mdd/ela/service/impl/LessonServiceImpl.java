@@ -83,14 +83,14 @@ public class LessonServiceImpl implements LessonService {
 
 
     @Override
-    public APIResponse getAllComboBox(Map<String, Object> reqMap) {
+    public APIResponse getAll(Map<String, Object> reqMap) {
         int limit = PagingUtil.getLimit((Integer) reqMap.get("pageSize"));
         int offset = PagingUtil.getOffset((Integer) reqMap.get("pageSize"), (Integer) reqMap.get("pageNum"));
         reqMap.put("limit", limit);
         reqMap.put("offset", offset);
         reqMap.put("accountId",LoggedInUserUtil.getIdOfLoggedInUser());
 
-        List<LessonResponse> lessonResponseList = repository.getAllComboBox(reqMap);
+        List<LessonResponse> lessonResponseList = repository.getAllByReqMap(reqMap);
         Map<String,Object> resultResponse = new HashMap<>();
         int count = repository.getCount(reqMap);
         resultResponse.put("data",lessonResponseList);

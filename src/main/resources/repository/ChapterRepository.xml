@@ -10,6 +10,12 @@
     </resultMap>
 
 
+    <resultMap id="comboBoxResponse" type="com.mdd.ela.dto.base.ComboBoxResponse">
+        <result column="id" property="id"/>
+        <result column="title" property="title"/>
+    </resultMap>
+
+
     <select id="getAll" resultMap = "chapterResponse">
         select ct.*,l.id as lesson_id, c.title as course_title
         from chapter ct
@@ -86,5 +92,15 @@
             and c.id = #{courseId}
         </if>
         and c.author_account_id  = #{accountId}
+    </select>
+
+    <select id="getAllForComboBox" resultMap="comboBoxResponse">
+        select ct.id, ct.title
+        from chapter ct
+        left join course c on ct.course_id = c.id
+        left join account a on c.author_account_id = a.id
+        where true
+        and c.id = #{courseId}
+        order by ct.id desc
     </select>
 </mapper>

@@ -59,7 +59,7 @@
 
 
 
-    <select id="getAllComboBox" resultMap="lesson">
+    <select id="getAllByReqMap" resultMap="lesson">
         select l.*
         from lesson l
         left join chapter ct on l.chapter_id = ct.id
@@ -71,6 +71,9 @@
         </if>
         <if test="chapterId != null and chapterId != 0">
             and ct.id = #{chapterId}
+        </if>
+        <if test="courseId != null and courseId != 0">
+            and c.id = #{courseId}
         </if>
         limit #{limit}
         offset #{offset}
@@ -88,6 +91,9 @@
         </if>
         <if test="chapterId != null and chapterId != 0">
             and ct.id = #{chapterId}
+        </if>
+        <if test="courseId != null and courseId != 0">
+            and c.id = #{courseId}
         </if>
     </select>
 
