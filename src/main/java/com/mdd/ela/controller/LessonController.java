@@ -67,12 +67,14 @@ public class LessonController {
     public ResponseEntity<APIResponse> getAllLessonComboBox(@RequestParam(defaultValue = "10") Integer pageSize,
                                                              @RequestParam(defaultValue = "1") Integer pageNum,
                                                              @RequestParam(required = false) String lessonTitle,
-                                                             @RequestParam(required = false) Long chapterId) {
+                                                             @RequestParam(required = false) Long chapterId,
+                                                            @RequestParam(required = false) Long courseId) {
         Map<String, Object> reqMap = new HashMap<>();
         reqMap.put("pageNum", pageNum);
         reqMap.put("pageSize", pageSize);
         reqMap.put("lessonTitle", lessonTitle);
         reqMap.put("chapterId", chapterId);
-        return new ResponseEntity<>(service.getAllComboBox(reqMap), HttpStatus.OK);
+        reqMap.put("courseId", courseId);
+        return new ResponseEntity<>(service.getAll(reqMap), HttpStatus.OK);
     }
 }

@@ -59,7 +59,7 @@ public class ChapterController {
 
     @Operation(summary = "Get all chapter")
     @GetMapping()
-    public ResponseEntity<APIResponse> getAllChapterComboBox(@RequestParam(defaultValue = "10") Integer pageSize,
+    public ResponseEntity<APIResponse> getAllChapter(@RequestParam(defaultValue = "10") Integer pageSize,
                                                              @RequestParam(defaultValue = "1") Integer pageNum,
                                                              @RequestParam(required = false) String chapterTitle,
                                                              @RequestParam(required = false) Long courseId) {
@@ -68,7 +68,14 @@ public class ChapterController {
         reqMap.put("pageSize", pageSize);
         reqMap.put("chapterTitle", chapterTitle);
         reqMap.put("courseId", courseId);
-        return new ResponseEntity<>(service.getAllComboBox(reqMap), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAll(reqMap), HttpStatus.OK);
     }
+
+    @Operation(summary = "Get all chapter for Combo box")
+    @GetMapping("/comboBox")
+    public ResponseEntity<APIResponse> getAllChapterComboBox(long courseId) {
+        return new ResponseEntity<>(service.getAllComboBox(courseId), HttpStatus.OK);
+    }
+
 }
 
