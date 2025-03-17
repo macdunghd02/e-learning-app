@@ -74,6 +74,6 @@ public class BaseController {
         });
 
 
-        return new ResponseEntity<>(APIResponse.success(request.getChunkIndex()), HttpStatus.OK);
+        return new ResponseEntity<>(APIResponse.success("https://ela-demo-v1-mdd.s3.ap-southeast-2.amazonaws.com/video/mp4/" + request.getUploadId() + "_" + request.getFileName()), HttpStatus.OK);
     }
 }
