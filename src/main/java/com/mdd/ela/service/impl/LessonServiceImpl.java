@@ -91,6 +91,10 @@ public class LessonServiceImpl implements LessonService {
         reqMap.put("accountId",LoggedInUserUtil.getIdOfLoggedInUser());
 
         List<LessonResponse> lessonResponseList = repository.getAllByReqMap(reqMap);
+        for(var item : lessonResponseList){
+            LessonVideoResponse lvr = lessonVideoRepository.getDetailByLessonId(item.getId());
+            item.setLessonVideoResponse(lvr);
+        }
         Map<String,Object> resultResponse = new HashMap<>();
         int count = repository.getCount(reqMap);
         resultResponse.put("data",lessonResponseList);
