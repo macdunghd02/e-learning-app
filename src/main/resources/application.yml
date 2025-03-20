@@ -43,7 +43,7 @@ openapi:
     api-docs: api-service
     title: ELA API document
     version: v1
-    server: http://192.168.1.24:8080
+    server: http://192.168.1.30:8080
 
 api:
   prefix: /ela/v1
@@ -70,6 +70,7 @@ security:
     signer-key: ${JWT_SIGNER_KEY}
   white-list:
     ela/v1/test/**
+    , ela/v1/course/hv
     , ela/v1/account/sign-up
     , ela/v1/account/send-otp
     , ela/v1/auth/**
