@@ -80,9 +80,32 @@ public class CourseController {
         return new ResponseEntity<>(service.getAll(reqMap), HttpStatus.OK);
     }
 
+    @Operation(summary = "Get all course")
+    @GetMapping("/hv")
+    public ResponseEntity<APIResponse> getAllCoursesHv(@RequestParam(defaultValue = "10") Integer pageSize,
+                                                     @RequestParam(defaultValue = "1") Integer pageNum,
+                                                     @RequestParam(required = false) String searchingValue,
+                                                     @RequestParam(required = false) Long categoryId,
+                                                     @RequestParam(required = false) Long authorAccountId,
+                                                     @RequestParam(required = false) Long priceFrom,
+                                                     @RequestParam(required = false) Long priceTo) {
+        Map<String,Object> reqMap = new HashMap<>();
+        reqMap.put("pageNum",pageNum);
+        reqMap.put("pageSize",pageSize);
+        reqMap.put("searchingValue",searchingValue);
+        reqMap.put("categoryId",categoryId);
+        reqMap.put("authorAccountId",authorAccountId);
+        reqMap.put("priceFrom", priceFrom);
+        reqMap.put("priceTo", priceTo);
+        return new ResponseEntity<>(service.getAll(reqMap), HttpStatus.OK);
+    }
+
     @Operation(summary = "Get all course for Combo box")
     @GetMapping("/comboBox")
     public ResponseEntity<APIResponse> getAllCoursesComboBox() {
         return new ResponseEntity<>(service.getAllCoursesComboBox(), HttpStatus.OK);
     }
+
+
+
 }

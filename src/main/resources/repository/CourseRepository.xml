@@ -31,6 +31,7 @@
         <result column="type" property="type"/>
         <result column="category_id" property="categoryId"/>
         <result column="category_name" property="categoryName"/>
+        <result column="author_name" property="authorName"/>
 
 
 
@@ -67,10 +68,17 @@
     </sql>
 
     <select id="getAll" resultMap = "courseResponse">
-        select c.*
+        select c.*, a.full_name as author_name, tmp1.num_of_lesson as num_of_lesson, tmp.description as category_name,
+        tmp1.total_time as total_time
         from course c
         left join account a on c.author_account_id = a.id
-        left join <include refid="categoryTable"></include> ct on c.category_id = ct.id
+        left join <include refid="categoryTable"></include> tmp on c.category_id = tmp.id
+        left join (
+        select count(l.id) as num_of_lesson, sum(ls.duration) as total_time, c.id from lesson l
+        left join lesson_video ls on l.id = ls.lesson_id
+        join chapter ct on l.chapter_id = ct.id
+        join course c on ct.course_id = c.id
+        group by c.id) tmp1 on c.id = tmp1.id
         where true
         <include refid="filter"></include>
         order by c.id desc
