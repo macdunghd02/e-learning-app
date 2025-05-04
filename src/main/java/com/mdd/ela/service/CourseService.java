@@ -13,6 +13,9 @@ import java.util.Map;
 
 public interface CourseService {
     APIResponse getAll(Map<String,Object> reqMap);
+
+    APIResponse getAllByHV(Map<String, Object> reqMap);
+
     APIResponse getDetail(long id);
     APIResponse create(CourseRequest request);
     APIResponse update(CourseRequest request);
