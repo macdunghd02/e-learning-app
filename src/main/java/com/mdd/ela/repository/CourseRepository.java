@@ -16,6 +16,9 @@ import java.util.Map;
 @Mapper
 public interface CourseRepository {
     List<CourseResponse> getAll(Map<String,Object> reqMap);
+    List<CourseResponse> getPopularCourse();
+    List<CourseResponse> getQualityCourse();
+
     int getCount(Map<String,Object> reqMap);
     CourseResponse getDetail(long id);
     int create(CourseRequest request);

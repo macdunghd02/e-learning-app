@@ -1,5 +1,6 @@
 package com.mdd.ela.dto.course;
 
+import com.mdd.ela.dto.chapter.ChapterResponse;
 import com.mdd.ela.model.entity.Course;
 import com.mdd.ela.dto.rating.RatingResponse;
 import lombok.*;
@@ -23,4 +24,6 @@ public class CourseResponse extends Course {
     List<RatingResponse> ratingResponseList;
     String categoryName;
     List<CourseNoteResponse> courseNoteResponseList;
+    List<ChapterResponse> chapterResponseList;
+    Double ratingAvg;
 }

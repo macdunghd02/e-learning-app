@@ -5,6 +5,7 @@ import com.mdd.ela.dto.course.CourseRequest;
 import com.mdd.ela.dto.course.CourseResponse;
 import com.mdd.ela.model.base.APIResponse;
 import com.mdd.ela.exception.AppRuntimeException;
+import com.mdd.ela.repository.ChapterRepository;
 import com.mdd.ela.repository.CourseNoteRepository;
 import com.mdd.ela.repository.CourseRepository;
 import com.mdd.ela.service.CourseNoteService;
@@ -16,7 +17,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,11 +34,13 @@ public class CourseServiceImpl implements CourseService {
     CourseRepository repository;
     CourseNoteService courseNoteService;
     CourseNoteRepository courseNoteRepository;
+    ChapterRepository chapterRepository;
 
-    public CourseServiceImpl(CourseRepository repository, CourseNoteService courseNoteService, CourseNoteRepository courseNoteRepository) {
+    public CourseServiceImpl(CourseRepository repository, CourseNoteService courseNoteService, CourseNoteRepository courseNoteRepository, ChapterRepository chapterRepository) {
         this.repository = repository;
         this.courseNoteService = courseNoteService;
         this.courseNoteRepository = courseNoteRepository;
+        this.chapterRepository = chapterRepository;
     }
 
 
@@ -48,6 +50,9 @@ public class CourseServiceImpl implements CourseService {
         int offset = PagingUtil.getOffset((Integer) reqMap.get("pageSize"), (Integer) reqMap.get("pageNum"));
         reqMap.put("limit", limit);
         reqMap.put("offset", offset);
+        List<CourseResponse> popularCourseResponseList = repository.getPopularCourse();
+        List<CourseResponse> qualityCourseResponseList = repository.getQualityCourse();
+
         List<CourseResponse> courseResponseList = repository.getAll(reqMap);
         int count = repository.getCount(reqMap);
         for(CourseResponse courseResponse : courseResponseList){
@@ -55,6 +60,44 @@ public class CourseServiceImpl implements CourseService {
         }
         Map<String,Object> resultResponse = new HashMap<>();
         resultResponse.put("data",courseResponseList);
+        resultResponse.put("metaData",Map.of(
+                "pageSize", reqMap.get("pageSize"),
+                "pageNum", reqMap.get("pageNum"),
+                "totalPage", (int)Math.ceil((double) count/(int)reqMap.get("pageSize")),
+                "totalRecords", count
+        ));
+        return APIResponse.success(resultResponse);
+    }
+
+    @Override
+    public APIResponse getAllByHV(Map<String, Object> reqMap) {
+        int limit = PagingUtil.getLimit((Integer) reqMap.get("pageSize"));
+        int offset = PagingUtil.getOffset((Integer) reqMap.get("pageSize"), (Integer) reqMap.get("pageNum"));
+        reqMap.put("limit", limit);
+        reqMap.put("offset", offset);
+        List<CourseResponse> popularCourseResponseList = repository.getPopularCourse();
+        for(CourseResponse popularCourseResponse : popularCourseResponseList){
+            popularCourseResponse.setCourseNoteResponseList(courseNoteRepository.getAllByCourseId(popularCourseResponse.getId()));
+            popularCourseResponse.setChapterResponseList(chapterRepository.getAll(popularCourseResponse.getId()));
+        }
+        List<CourseResponse> qualityCourseResponseList = repository.getQualityCourse();
+        for(CourseResponse qualityCourseResponse : qualityCourseResponseList){
+            qualityCourseResponse.setCourseNoteResponseList(courseNoteRepository.getAllByCourseId(qualityCourseResponse.getId()));
+            qualityCourseResponse.setChapterResponseList(chapterRepository.getAll(qualityCourseResponse.getId()));
+
+        }
+        List<CourseResponse> courseResponseList = repository.getAll(reqMap);
+        int count = repository.getCount(reqMap);
+        for(CourseResponse courseResponse : courseResponseList){
+            courseResponse.setCourseNoteResponseList(courseNoteRepository.getAllByCourseId(courseResponse.getId()));
+            courseResponse.setChapterResponseList(chapterRepository.getAll(courseResponse.getId()));
+        }
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("Khóa học phổ biến", popularCourseResponseList);
+        resultMap.put("Khóa học chất lượng cao", qualityCourseResponseList);
+        resultMap.put("Tất cả khóa học", courseResponseList);
+        Map<String,Object> resultResponse = new HashMap<>();
+        resultResponse.put("data",resultMap);
         resultResponse.put("metaData",Map.of(
                 "pageSize", reqMap.get("pageSize"),
                 "pageNum", reqMap.get("pageNum"),

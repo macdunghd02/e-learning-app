@@ -32,6 +32,7 @@
         <result column="category_id" property="categoryId"/>
         <result column="category_name" property="categoryName"/>
         <result column="author_name" property="authorName"/>
+        <result column="rating_avg" property="ratingAvg"/>
 
 
 
@@ -69,7 +70,7 @@
 
     <select id="getAll" resultMap = "courseResponse">
         select c.*, a.full_name as author_name, tmp1.num_of_lesson as num_of_lesson, tmp.description as category_name,
-        tmp1.total_time as total_time
+        tmp1.total_time as total_time, tmp2.average_rating as rating_avg
         from course c
         left join account a on c.author_account_id = a.id
         left join <include refid="categoryTable"></include> tmp on c.category_id = tmp.id
@@ -79,11 +80,52 @@
         join chapter ct on l.chapter_id = ct.id
         join course c on ct.course_id = c.id
         group by c.id) tmp1 on c.id = tmp1.id
+        left join (select course_id, avg(rating) as average_rating  from `rating` group by course_id) tmp2 on c.id = tmp2.course_id
         where true
         <include refid="filter"></include>
         order by c.id desc
         limit #{limit}
         offset #{offset}
+    </select>
+
+
+    <select id="getPopularCourse" resultMap = "courseResponse">
+        select c.*, a.full_name as author_name, tmp1.num_of_lesson as num_of_lesson, tmp.description as category_name,
+        tmp1.total_time as total_time, tmp3.average_rating as rating_avg
+        from course c
+        left join account a on c.author_account_id = a.id
+        left join <include refid="categoryTable"></include> tmp on c.category_id = tmp.id
+        left join (
+        select count(l.id) as num_of_lesson, sum(ls.duration) as total_time, c.id from lesson l
+        left join lesson_video ls on l.id = ls.lesson_id
+        join chapter ct on l.chapter_id = ct.id
+        join course c on ct.course_id = c.id
+        group by c.id) tmp1 on c.id = tmp1.id
+        left join (select course_id, count(id)/2 as num_of_sell  from transaction group by course_id) tmp2 on c.id = tmp2.course_id
+        left join (select course_id, avg(rating) as average_rating  from `rating` group by course_id) tmp3 on c.id = tmp3.course_id
+        where true
+        order by tmp2.num_of_sell desc
+        limit 10
+        offset 1
+    </select>
+
+    <select id="getQualityCourse" resultMap = "courseResponse">
+        select c.*, a.full_name as author_name, tmp1.num_of_lesson as num_of_lesson, tmp.description as category_name,
+        tmp1.total_time as total_time, tmp2.average_rating as rating_avg
+        from course c
+        left join account a on c.author_account_id = a.id
+        left join <include refid="categoryTable"></include> tmp on c.category_id = tmp.id
+        left join (
+        select count(l.id) as num_of_lesson, sum(ls.duration) as total_time, c.id from lesson l
+        left join lesson_video ls on l.id = ls.lesson_id
+        join chapter ct on l.chapter_id = ct.id
+        join course c on ct.course_id = c.id
+        group by c.id) tmp1 on c.id = tmp1.id
+        left join (select course_id, avg(rating) as average_rating  from `rating` group by course_id) tmp2 on c.id = tmp2.course_id
+        where true
+        order by tmp2.average_rating desc
+        limit 10
+        offset 1
     </select>
 
     <select id="getCount" resultType="int">

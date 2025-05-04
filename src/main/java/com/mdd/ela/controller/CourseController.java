@@ -97,7 +97,7 @@ public class CourseController {
         reqMap.put("authorAccountId",authorAccountId);
         reqMap.put("priceFrom", priceFrom);
         reqMap.put("priceTo", priceTo);
-        return new ResponseEntity<>(service.getAll(reqMap), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllByHV(reqMap), HttpStatus.OK);
     }
 
     @Operation(summary = "Get all course for Combo box")
