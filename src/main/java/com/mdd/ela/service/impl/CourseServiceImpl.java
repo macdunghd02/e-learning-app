@@ -93,9 +93,9 @@ public class CourseServiceImpl implements CourseService {
             courseResponse.setChapterResponseList(chapterRepository.getAll(courseResponse.getId()));
         }
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("Khóa học phổ biến", popularCourseResponseList);
-        resultMap.put("Khóa học chất lượng cao", qualityCourseResponseList);
-        resultMap.put("Tất cả khóa học", courseResponseList);
+        resultMap.put("popularCourses", popularCourseResponseList);
+        resultMap.put("highQualityCourses", qualityCourseResponseList);
+        resultMap.put("allCourse", courseResponseList);
         Map<String,Object> resultResponse = new HashMap<>();
         resultResponse.put("data",resultMap);
         resultResponse.put("metaData",Map.of(

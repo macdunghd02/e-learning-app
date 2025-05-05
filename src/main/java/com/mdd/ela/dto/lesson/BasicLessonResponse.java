@@ -16,6 +16,7 @@ import lombok.experimental.FieldDefaults;
 public class BasicLessonResponse {
     long id;
     String title;
-    String url;
+    String lessonVideoUrl;
+    String lessonAttachment;
     Double duration;
 }
