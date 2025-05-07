@@ -71,6 +71,7 @@ security:
   white-list:
     ela/v1/test/**
     , ela/v1/course/hv
+    , ela/v1/course/filter
     , ela/v1/account/sign-up
     , ela/v1/account/send-otp
     , ela/v1/auth/**

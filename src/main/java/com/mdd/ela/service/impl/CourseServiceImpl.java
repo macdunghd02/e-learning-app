@@ -50,8 +50,6 @@ public class CourseServiceImpl implements CourseService {
         int offset = PagingUtil.getOffset((Integer) reqMap.get("pageSize"), (Integer) reqMap.get("pageNum"));
         reqMap.put("limit", limit);
         reqMap.put("offset", offset);
-        List<CourseResponse> popularCourseResponseList = repository.getPopularCourse();
-        List<CourseResponse> qualityCourseResponseList = repository.getQualityCourse();
 
         List<CourseResponse> courseResponseList = repository.getAll(reqMap);
         int count = repository.getCount(reqMap);
@@ -70,11 +68,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public APIResponse getAllByHV(Map<String, Object> reqMap) {
-        int limit = PagingUtil.getLimit((Integer) reqMap.get("pageSize"));
-        int offset = PagingUtil.getOffset((Integer) reqMap.get("pageSize"), (Integer) reqMap.get("pageNum"));
-        reqMap.put("limit", limit);
-        reqMap.put("offset", offset);
+    public APIResponse getAllByHV() {
+
         List<CourseResponse> popularCourseResponseList = repository.getPopularCourse();
         for(CourseResponse popularCourseResponse : popularCourseResponseList){
             popularCourseResponse.setCourseNoteResponseList(courseNoteRepository.getAllByCourseId(popularCourseResponse.getId()));
@@ -86,24 +81,11 @@ public class CourseServiceImpl implements CourseService {
             qualityCourseResponse.setChapterResponseList(chapterRepository.getAll(qualityCourseResponse.getId()));
 
         }
-        List<CourseResponse> courseResponseList = repository.getAll(reqMap);
-        int count = repository.getCount(reqMap);
-        for(CourseResponse courseResponse : courseResponseList){
-            courseResponse.setCourseNoteResponseList(courseNoteRepository.getAllByCourseId(courseResponse.getId()));
-            courseResponse.setChapterResponseList(chapterRepository.getAll(courseResponse.getId()));
-        }
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("popularCourses", popularCourseResponseList);
         resultMap.put("highQualityCourses", qualityCourseResponseList);
-        resultMap.put("allCourse", courseResponseList);
         Map<String,Object> resultResponse = new HashMap<>();
         resultResponse.put("data",resultMap);
-        resultResponse.put("metaData",Map.of(
-                "pageSize", reqMap.get("pageSize"),
-                "pageNum", reqMap.get("pageNum"),
-                "totalPage", (int)Math.ceil((double) count/(int)reqMap.get("pageSize")),
-                "totalRecords", count
-        ));
         return APIResponse.success(resultResponse);
     }
 
