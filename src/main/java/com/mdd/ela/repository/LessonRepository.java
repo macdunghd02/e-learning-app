@@ -1,6 +1,7 @@
 package com.mdd.ela.repository;
 
 import com.mdd.ela.dto.chapter.ChapterResponse;
+import com.mdd.ela.dto.lesson.BasicLessonResponse;
 import com.mdd.ela.dto.lesson.LessonRequest;
 import com.mdd.ela.dto.lesson.LessonResponse;
 import org.apache.ibatis.annotations.Mapper;
@@ -15,6 +16,8 @@ import java.util.Map;
  */
 @Mapper
 public interface LessonRepository {
+    List<BasicLessonResponse> getBasicLessonResponseByChapterId(long chapterId);
+
     LessonResponse getDetail(long id);
 
     int insert(LessonRequest request);

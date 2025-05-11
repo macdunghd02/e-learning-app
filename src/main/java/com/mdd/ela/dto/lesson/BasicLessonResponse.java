@@ -1,5 +1,6 @@
 package com.mdd.ela.dto.lesson;
 
+import com.mdd.ela.model.entity.Lesson;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,7 +13,10 @@ import lombok.experimental.FieldDefaults;
  * @AllArgsConstructor
  * @FieldDefaults(level = AccessLevel.PRIVATE)
  */
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class BasicLessonResponse {
     long id;
     String title;

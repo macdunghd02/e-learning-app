@@ -1,0 +1,20 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdd.ela.repository.DashboardRepository">
+    <resultMap id="newLearner" type="com.mdd.ela.model.entity.Course">
+        <result column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="author_account_id" property="authorAccountId"/>
+        <result column="description" property="description"/>
+        <result column="avatar_url" property="avatarUrl"/>
+        <result column="root_price" property="rootPrice"/>
+        <result column="active" property="active"/>
+        <result column="type" property="type"/>
+        <result column="category_id" property="categoryId"/>
+
+        <result column="create_time" property="createTime"/>
+        <result column="create_user_id" property="createUserId"/>
+        <result column="modify_time" property="modifyTime"/>
+        <result column="modify_user_id" property="modifyUserId"/>
+    </resultMap>
+
+</mapper>

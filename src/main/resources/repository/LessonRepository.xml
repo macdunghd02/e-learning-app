@@ -14,6 +14,12 @@
     </resultMap>
 
 
+    <resultMap id="basicLesson" type="com.mdd.ela.dto.lesson.BasicLessonResponse">
+        <result column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="url" property="lessonVideoUrl"/>
+    </resultMap>
+
 
     <select id="getDetail" resultMap="lesson">
         select * from lesson v
@@ -100,6 +106,12 @@
     <select id="getAll" resultMap="lesson">
         select * from lesson
         where chapter_id = #{chapterId}
+    </select>
+
+    <select id="getBasicLessonResponseByChapterId" resultMap="basicLesson">
+        select l.id, l.title, lv.url from lesson l
+        left join lesson_video lv on l.id = lv.lesson_id
+        where l.chapter_id = #{chapterId}
     </select>
 
 </mapper>

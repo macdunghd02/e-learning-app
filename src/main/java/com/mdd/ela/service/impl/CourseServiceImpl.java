@@ -8,6 +8,7 @@ import com.mdd.ela.exception.AppRuntimeException;
 import com.mdd.ela.repository.ChapterRepository;
 import com.mdd.ela.repository.CourseNoteRepository;
 import com.mdd.ela.repository.CourseRepository;
+import com.mdd.ela.repository.LessonRepository;
 import com.mdd.ela.service.CourseNoteService;
 import com.mdd.ela.service.CourseService;
 import com.mdd.ela.util.LoggedInUserUtil;
@@ -35,12 +36,14 @@ public class CourseServiceImpl implements CourseService {
     CourseNoteService courseNoteService;
     CourseNoteRepository courseNoteRepository;
     ChapterRepository chapterRepository;
+    LessonRepository lessonRepository;
 
-    public CourseServiceImpl(CourseRepository repository, CourseNoteService courseNoteService, CourseNoteRepository courseNoteRepository, ChapterRepository chapterRepository) {
+    public CourseServiceImpl(CourseRepository repository, CourseNoteService courseNoteService, CourseNoteRepository courseNoteRepository, ChapterRepository chapterRepository, LessonRepository lessonRepository) {
         this.repository = repository;
         this.courseNoteService = courseNoteService;
         this.courseNoteRepository = courseNoteRepository;
         this.chapterRepository = chapterRepository;
+        this.lessonRepository = lessonRepository;
     }
 
 
@@ -74,12 +77,17 @@ public class CourseServiceImpl implements CourseService {
         for(CourseResponse popularCourseResponse : popularCourseResponseList){
             popularCourseResponse.setCourseNoteResponseList(courseNoteRepository.getAllByCourseId(popularCourseResponse.getId()));
             popularCourseResponse.setChapterResponseList(chapterRepository.getAll(popularCourseResponse.getId()));
+            for(var tmp : popularCourseResponse.getChapterResponseList()){
+                tmp.setLessonResponseList(lessonRepository.getBasicLessonResponseByChapterId(tmp.getId()));
+            }
         }
         List<CourseResponse> qualityCourseResponseList = repository.getQualityCourse();
         for(CourseResponse qualityCourseResponse : qualityCourseResponseList){
             qualityCourseResponse.setCourseNoteResponseList(courseNoteRepository.getAllByCourseId(qualityCourseResponse.getId()));
             qualityCourseResponse.setChapterResponseList(chapterRepository.getAll(qualityCourseResponse.getId()));
-
+            for(var tmp : qualityCourseResponse.getChapterResponseList()){
+                tmp.setLessonResponseList(lessonRepository.getBasicLessonResponseByChapterId(tmp.getId()));
+            }
         }
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("popularCourses", popularCourseResponseList);
