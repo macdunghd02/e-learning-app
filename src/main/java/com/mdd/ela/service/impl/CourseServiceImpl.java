@@ -139,5 +139,15 @@ public class CourseServiceImpl implements CourseService {
         return APIResponse.success(response);
     }
 
+    @Override
+    public APIResponse buyCourse(long courseId) {
+        long createUserId = LoggedInUserUtil.getIdOfLoggedInUser();
+        long accountId = repository.getDetail(courseId).getAuthorAccountId();
+        long money = repository.getDetail(courseId).getRootPrice();
+        repository.buyCourse(createUserId,courseId,createUserId,money *-1);
+        repository.buyCourse(accountId,courseId,createUserId, money *1);
+        return APIResponse.success(null);
+    }
+
 
 }

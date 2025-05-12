@@ -25,4 +25,5 @@ public interface CourseRepository {
     int update(CourseRequest request);
     int delete(long id);
     List<ComboBoxResponse> getAllForComboBox(long id);
+    int buyCourse(long accountId,long courseId,long createUserId, long money);
 }
