@@ -92,6 +92,10 @@ public class CourseController {
         return new ResponseEntity<>(service.getAllCoursesComboBox(), HttpStatus.OK);
     }
 
-
+    @Operation(summary = "Get all course for Combo box")
+    @PostMapping("/buy")
+    public ResponseEntity<APIResponse> buyCourse(long courseId) {
+        return new ResponseEntity<>(service.buyCourse(courseId), HttpStatus.OK);
+    }
 
 }

@@ -3,6 +3,7 @@ package com.mdd.ela.service;
 import com.mdd.ela.dto.course.CourseRequest;
 import com.mdd.ela.model.base.APIResponse;
 
+import javax.swing.plaf.IconUIResource;
 import java.util.Map;
 
 /**
@@ -20,4 +21,6 @@ public interface CourseService {
     APIResponse update(CourseRequest request);
     APIResponse delete(long id);
     APIResponse getAllCoursesComboBox();
+    APIResponse buyCourse(long courseId);
+
 }
