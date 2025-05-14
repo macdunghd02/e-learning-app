@@ -22,5 +22,7 @@ public interface CourseService {
     APIResponse delete(long id);
     APIResponse getAllCoursesComboBox();
     APIResponse buyCourse(long courseId);
+    APIResponse ratingCourse(long courseId, int rating, String content);
+
 
 }
