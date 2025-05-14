@@ -149,5 +149,12 @@ public class CourseServiceImpl implements CourseService {
         return APIResponse.success(null);
     }
 
+    @Override
+    public APIResponse ratingCourse(long courseId, int rating, String content) {
+        long createUserId = LoggedInUserUtil.getIdOfLoggedInUser();
+        repository.ratingCourse(courseId,createUserId, rating, content);
+        return APIResponse.success(null);
+    }
+
 
 }

@@ -61,7 +61,7 @@ public class CourseController {
     }
 
     @Operation(summary = "Get all course")
-    @GetMapping("/filter")
+    @GetMapping()
     public ResponseEntity<APIResponse> getAllCourses(@RequestParam(defaultValue = "10") Integer pageSize,
                                                      @RequestParam(defaultValue = "1") Integer pageNum,
                                                      @RequestParam(required = false) String searchingValue,
@@ -92,10 +92,15 @@ public class CourseController {
         return new ResponseEntity<>(service.getAllCoursesComboBox(), HttpStatus.OK);
     }
 
-    @Operation(summary = "Get all course for Combo box")
+    @Operation(summary = "buy course")
     @PostMapping("/buy")
     public ResponseEntity<APIResponse> buyCourse(long courseId) {
         return new ResponseEntity<>(service.buyCourse(courseId), HttpStatus.OK);
+    }
+    @Operation(summary = "rating course")
+    @PostMapping("/rating")
+    public ResponseEntity<APIResponse> ratingCourse(long courseId, int rating,@RequestParam(required = false) String content) {
+        return new ResponseEntity<>(service.ratingCourse(courseId, rating,content), HttpStatus.OK);
     }
 
 }

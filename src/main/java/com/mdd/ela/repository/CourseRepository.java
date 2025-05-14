@@ -26,4 +26,5 @@ public interface CourseRepository {
     int delete(long id);
     List<ComboBoxResponse> getAllForComboBox(long id);
     int buyCourse(long accountId,long courseId,long createUserId, long money);
+    int ratingCourse(long courseId, long createUserId, int rating, String content);
 }

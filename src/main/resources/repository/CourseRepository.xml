@@ -227,4 +227,20 @@
             #{createUserId}
         )
     </insert>
+
+    <insert id="ratingCourse">
+        insert into rating(
+        account_id,
+        course_id,
+        rating,
+        content,
+        create_time)
+        values (
+        #{createUserId},
+        #{courseId},
+        #{rating},
+        #{content},
+        now()
+        )
+    </insert>
 </mapper>
